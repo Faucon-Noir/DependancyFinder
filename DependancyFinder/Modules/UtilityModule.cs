@@ -196,5 +196,35 @@ namespace DependancyFinder.Modules
 
             return (directory, fileName);
         }
+
+        /// <summary>
+        /// Method to format the file name
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+
+        public static string FormatFileName(string fileName)
+        {
+            string formattedFileName = fileName;
+            // start
+            while (formattedFileName.Length > 0 && !char.IsLetterOrDigit(formattedFileName[0]))
+            {
+                formattedFileName = formattedFileName.Substring(1);
+                CustomWriteLine(UsageEnum.Log, formattedFileName);
+            }
+            // end
+            while (formattedFileName.Length > 0 && !char.IsLetterOrDigit(formattedFileName[^1]))
+            {
+                formattedFileName = formattedFileName.Substring(0, formattedFileName.Length - 1);
+                CustomWriteLine(UsageEnum.Log, formattedFileName);
+            }
+
+            // If the string is still empty after removing non-letter/digit characters, throw an exception
+            if (formattedFileName.Length == 0)
+            {
+                throw new ArgumentException("File name does not contain any valid characters.");
+            }
+            return formattedFileName;
+        }
     }
 }

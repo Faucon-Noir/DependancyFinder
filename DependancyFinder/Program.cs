@@ -31,7 +31,7 @@ namespace DependancyFinder
             }
             catch (Exception e)
             {
-                CustomWriteLine(UsageEnum.Error, $"Error Program: {e.StackTrace}\n{e.Source}\n{e.TargetSite}\n{e.InnerException}");
+                CustomWriteLine(UsageEnum.Error, $"Error Program: {e.Message}\nSource: {e.Source}\nTargetSite: {e.TargetSite}\nInnerException: {e.InnerException}");
             }
         }
     }

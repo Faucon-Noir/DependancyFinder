@@ -47,7 +47,7 @@ namespace DependancyFinder.Modules.Generator
 
             foreach (string dep in dependencies)
             {
-                root.Dependencies[dep] = new Dependency { Name = dep };
+                root.Dependencies[dep] = await DependencyRecursive.GenerateDependencyAsync(dep);
             }
 
             Dictionary<string, Dependency> output = new Dictionary<string, Dependency> { { fileName, root } };
@@ -55,7 +55,6 @@ namespace DependancyFinder.Modules.Generator
             string json = JsonConvert.SerializeObject(output, Formatting.Indented);
 
             string outputPath = "./" + fileName + ".json";
-            CustomWriteLine(UsageEnum.Log, $"Output Path: {outputPath}");
 
             await File.WriteAllTextAsync(outputPath, json);
             CustomWriteLine(UsageEnum.Processing, "Stored Procedures Generated");
