@@ -31,7 +31,7 @@ namespace DependancyFinder
             }
             catch (Exception e)
             {
-                CustomWriteLine(UsageEnum.Error, $"Error Program: {e.Message}");
+                CustomWriteLine(UsageEnum.Error, $"Error Program: {e.Message}\nCheck {e.TargetSite}");
             }
         }
     }

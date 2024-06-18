@@ -13,7 +13,7 @@ namespace DependancyFinder.Modules.Generator
     }
     public class StoredProcedures
     {
-        public static async Task<(string, string)> GenerateStoredProceduresAsync(string inputPath, string outputPath)
+        public static async Task<string> GenerateStoredProceduresAsync(string inputPath, string outputPath)
         {
             CustomWriteLine(UsageEnum.Processing, "Generating Stored Procedures");
             string sql = await File.ReadAllTextAsync(inputPath);
@@ -51,12 +51,8 @@ namespace DependancyFinder.Modules.Generator
 
             string json = JsonConvert.SerializeObject(output, Formatting.Indented);
 
-            IsValidDirectory(outputPath);
-            string outputFile = Path.Combine(outputPath, fileName + ".json");
-            await File.WriteAllTextAsync(outputFile, json);
-            CustomWriteLine(UsageEnum.Complete, $"Process complete. See {outputFile}");
 
-            return (json, outputFile);
+            return json;
         }
     }
 }

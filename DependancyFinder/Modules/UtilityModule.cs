@@ -200,24 +200,24 @@ namespace DependancyFinder.Modules
         /// <returns></returns>
         public static string FormatFileName(string fileName)
         {
-            string formattedFileName = fileName;
+            CustomWriteLine(UsageEnum.Log, $"Formatting file name: {fileName}");
             // start
-            while (formattedFileName.Length > 0 && !char.IsLetterOrDigit(formattedFileName[0]))
+            while (fileName.Length > 0 && !char.IsLetterOrDigit(fileName[0]))
             {
-                formattedFileName = formattedFileName.Substring(1);
+                fileName = fileName.Substring(1);
             }
             // end
-            while (formattedFileName.Length > 0 && !char.IsLetterOrDigit(formattedFileName[^1]))
+            while (fileName.Length > 0 && !char.IsLetterOrDigit(fileName[^1]))
             {
-                formattedFileName = formattedFileName.Substring(0, formattedFileName.Length - 1);
+                fileName = fileName.Substring(0, fileName.Length - 1);
             }
 
             // If the string is still empty after removing non-letter/digit characters, throw an exception
-            if (formattedFileName.Length == 0)
+            if (fileName.Length == 0)
             {
-                throw new ArgumentException("File name does not contain any valid characters.");
+                throw new ArgumentException($"File name does not contain any valid characters.");
             }
-            return formattedFileName;
+            return fileName;
         }
 
         public static string FindFileInFilePath(string filePath, string name)

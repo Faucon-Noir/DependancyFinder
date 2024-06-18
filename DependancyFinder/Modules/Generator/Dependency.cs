@@ -21,7 +21,6 @@ namespace DependancyFinder.Modules.Generator
             {
                 CustomWriteLine(UsageEnum.Processing, $"Processing Dependencies {name}");
                 name = FormatFileName(name);
-                // var file = FindFileInFilePath(filePath, name);
                 string sql = await File.ReadAllTextAsync(FindFileInFilePath(filePath, name));
 
                 TSQLTokenizer tokenizer = new TSQLTokenizer(sql);
