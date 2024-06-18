@@ -1,1 +1,1 @@
-# DependancyFinder
+# DependencyFinder.Tool

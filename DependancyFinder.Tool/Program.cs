@@ -1,11 +1,11 @@
-﻿global using static DependancyFinder.Modules.UtilityModule;
+﻿global using static DependencyFinder.Tool.Modules.UtilityModule;
 using CommandLine;
-using DependancyFinder.Modules.Generator;
-using DependancyFinder.Modules;
+using DependencyFinder.Tool.Modules.Generator;
+using DependencyFinder.Tool.Modules;
 using System.Diagnostics;
-using static DependancyFinder.Modules.EnumModule;
+using static DependencyFinder.Tool.Modules.EnumModule;
 
-namespace DependancyFinder
+namespace DependencyFinder.Tool
 {
     public class Program
     {

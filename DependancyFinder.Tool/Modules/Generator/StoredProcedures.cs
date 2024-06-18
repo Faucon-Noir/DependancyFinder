@@ -1,10 +1,10 @@
 using TSQL;
 using TSQL.Tokens;
 using Newtonsoft.Json;
-using static DependancyFinder.Modules.EnumModule;
+using static DependencyFinder.Tool.Modules.EnumModule;
 
 
-namespace DependancyFinder.Modules.Generator
+namespace DependencyFinder.Tool.Modules.Generator
 {
     public class Dependency
     {

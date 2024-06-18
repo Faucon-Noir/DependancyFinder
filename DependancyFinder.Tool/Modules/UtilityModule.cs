@@ -1,10 +1,10 @@
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
-using DependancyFinder.Modules.Validation;
-using static DependancyFinder.Modules.EnumModule;
+using DependencyFinder.Tool.Modules.Validation;
+using static DependencyFinder.Tool.Modules.EnumModule;
 
-namespace DependancyFinder.Modules
+namespace DependencyFinder.Tool.Modules
 {
     public class UtilityModule
     {

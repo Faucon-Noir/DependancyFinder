@@ -4,11 +4,11 @@ using TSQL.Tokens;
 using Newtonsoft.Json;
 using System.IO;
 using System.Threading.Tasks;
-using static DependancyFinder.Modules.EnumModule;
+using static DependencyFinder.Tool.Modules.EnumModule;
 using System.Text.RegularExpressions;
 
 
-namespace DependancyFinder.Modules.Generator
+namespace DependencyFinder.Tool.Modules.Generator
 {
 
     public class DependencyRecursive

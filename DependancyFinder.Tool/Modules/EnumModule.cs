@@ -1,4 +1,4 @@
-﻿namespace DependancyFinder.Modules
+﻿namespace DependencyFinder.Tool.Modules
 {
     public class EnumModule
     {
