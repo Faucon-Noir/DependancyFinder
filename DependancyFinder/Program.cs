@@ -26,12 +26,12 @@ namespace DependancyFinder
                    await ProcessGenerationModule.ProcessGeneration(o);
                });
                 stopwatch.Stop();
-                CustomWriteLine(UsageEnum.Info, "\n--------------------------------------------- Program Complete ---------------------------------------------\n");
-                CustomWriteLine(UsageEnum.Info, $"Execution Time: {stopwatch.ElapsedMilliseconds} ms");
+                CustomWriteLine(UsageEnum.Info, "\n--------------------------------------------- Program Complete ---------------------------------------------");
+                CustomWriteLine(UsageEnum.Info, $"Execution Time: {stopwatch.ElapsedMilliseconds} ms\n");
             }
             catch (Exception e)
             {
-                CustomWriteLine(UsageEnum.Error, $"Error Program: {e.Message}\nSource: {e.Source}\nTargetSite: {e.TargetSite}\nInnerException: {e.InnerException}");
+                CustomWriteLine(UsageEnum.Error, $"Error Program: {e.Message}");
             }
         }
     }

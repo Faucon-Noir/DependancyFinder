@@ -10,6 +10,6 @@ public class Options
     /// <summary>
     /// Output directory path
     /// </summary>
-    // [Option('o', "output", Required = false, HelpText = "Output directory path.")]
-    // public string? OutputPath { get; set; } = string.Empty;
+    [Option('o', "outputPath", Required = false, HelpText = "Output directory path.")]
+    public string? OutputPath { get; set; } = string.Empty;
 }

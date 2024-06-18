@@ -1,9 +1,6 @@
 using TSQL;
-using TSQL.Statements;
 using TSQL.Tokens;
 using Newtonsoft.Json;
-using System.IO;
-using System.Threading.Tasks;
 using static DependancyFinder.Modules.EnumModule;
 
 
@@ -16,10 +13,9 @@ namespace DependancyFinder.Modules.Generator
     }
     public class StoredProcedures
     {
-        public static async Task<(string, string)> GenerateStoredProceduresAsync(string inputPath)
+        public static async Task<(string, string)> GenerateStoredProceduresAsync(string inputPath, string outputPath)
         {
             CustomWriteLine(UsageEnum.Processing, "Generating Stored Procedures");
-            CustomWriteLine(UsageEnum.Log, $"{SplitFilePath(inputPath)}");
             string sql = await File.ReadAllTextAsync(inputPath);
 
             TSQLTokenizer tokenizer = new TSQLTokenizer(sql);
@@ -42,24 +38,25 @@ namespace DependancyFinder.Modules.Generator
                 }
             }
             string fileName = SplitFilePath(inputPath).Item2;
+            string filePath = SplitFilePath(inputPath).Item1;
 
             Dependency root = new Dependency { Name = fileName };
 
             foreach (string dep in dependencies)
             {
-                root.Dependencies[dep] = await DependencyRecursive.GenerateDependencyAsync(dep);
+                root.Dependencies[dep] = await DependencyRecursive.GenerateDependencyAsync(dep, filePath);
             }
 
-            Dictionary<string, Dependency> output = new Dictionary<string, Dependency> { { fileName, root } };
+            Dictionary<string, Dependency> output = new Dictionary<string, Dependency> { { FormatFileName(fileName), root } };
 
             string json = JsonConvert.SerializeObject(output, Formatting.Indented);
 
-            string outputPath = "./" + fileName + ".json";
+            IsValidDirectory(outputPath);
+            string outputFile = Path.Combine(outputPath, fileName + ".json");
+            await File.WriteAllTextAsync(outputFile, json);
+            CustomWriteLine(UsageEnum.Complete, $"Process complete. See {outputFile}");
 
-            await File.WriteAllTextAsync(outputPath, json);
-            CustomWriteLine(UsageEnum.Processing, "Stored Procedures Generated");
-
-            return (json, outputPath);
+            return (json, outputFile);
         }
     }
 }

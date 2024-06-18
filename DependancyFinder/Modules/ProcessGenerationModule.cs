@@ -7,16 +7,27 @@ namespace DependancyFinder.Modules.Generator
         public static async Task<Task> ProcessGeneration(Options options)
         {
             string inputPath = options.InputPath;
-            // string outputPath = options.OutputPath ?? inputPath;
+            string outputPath = options.OutputPath ?? "./";
             try
             {
-                // J'ai besoin de construire un json qui contient le nom du fichier d'entrée, ses dépendances, et les dépendances des dépendances
-                await StoredProcedures.GenerateStoredProceduresAsync(inputPath);
+                if (Directory.Exists(inputPath))
+                {
+                    string[] files = Directory.GetFiles(inputPath, "*.sql");
+                    foreach (string file in files)
+                    {
+                        await StoredProcedures.GenerateStoredProceduresAsync(file, outputPath);
+                    }
+                }
+                else
+                {
+                    await StoredProcedures.GenerateStoredProceduresAsync(inputPath, outputPath);
+                }
+
                 return Task.CompletedTask;
             }
             catch (Exception e)
             {
-                CustomWriteLine(UsageEnum.Error, $"Error Program: {e.Message}");
+                CustomWriteLine(UsageEnum.Error, $"Error Processing: {e.Message}");
                 throw;
             }
         }

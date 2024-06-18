@@ -183,15 +183,11 @@ namespace DependancyFinder.Modules
         /// <summary>
         /// Method to split the file path into directory and file name
         /// <param name="filePath"></param>
-        /// <returns></returns>
-        public static (string?, string) SplitFilePath(string filePath)
+        /// <returns>A tuple where Item1 is the directory and Item2 the fileName wihtout extension</returns>
+        public static (string, string) SplitFilePath(string filePath)
         {
-            // if (filePath == null)
-            // {
-            //     throw new ArgumentNullException(nameof(filePath));
-            // }
 
-            string? directory = Path.GetDirectoryName(filePath);
+            string directory = Path.GetDirectoryName(filePath)!;
             string fileName = Path.GetFileNameWithoutExtension(filePath);
 
             return (directory, fileName);
@@ -202,7 +198,6 @@ namespace DependancyFinder.Modules
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-
         public static string FormatFileName(string fileName)
         {
             string formattedFileName = fileName;
@@ -210,13 +205,11 @@ namespace DependancyFinder.Modules
             while (formattedFileName.Length > 0 && !char.IsLetterOrDigit(formattedFileName[0]))
             {
                 formattedFileName = formattedFileName.Substring(1);
-                CustomWriteLine(UsageEnum.Log, formattedFileName);
             }
             // end
             while (formattedFileName.Length > 0 && !char.IsLetterOrDigit(formattedFileName[^1]))
             {
                 formattedFileName = formattedFileName.Substring(0, formattedFileName.Length - 1);
-                CustomWriteLine(UsageEnum.Log, formattedFileName);
             }
 
             // If the string is still empty after removing non-letter/digit characters, throw an exception
@@ -225,6 +218,31 @@ namespace DependancyFinder.Modules
                 throw new ArgumentException("File name does not contain any valid characters.");
             }
             return formattedFileName;
+        }
+
+        public static string FindFileInFilePath(string filePath, string name)
+        {
+            if (!Directory.Exists(filePath))
+            {
+                CustomWriteLine(UsageEnum.Error, $"Directory {filePath} does not exist.");
+                return "Not Found";
+            }
+
+            Regex regex = new Regex(@$"\b{name}\b", RegexOptions.IgnoreCase);
+
+            var files = Directory.GetFiles(filePath);
+            foreach (var file in files)
+            {
+                string fileName = Path.GetFileName(file);
+                Match match = regex.Match(fileName);
+                if (match.Success)
+                {
+                    return file;
+                }
+            }
+
+            CustomWriteLine(UsageEnum.Error, $"{name} in {filePath} not found.");
+            return "Not Found";
         }
     }
 }

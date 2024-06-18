@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Threading.Tasks;
 using static DependancyFinder.Modules.EnumModule;
+using System.Text.RegularExpressions;
 
 
 namespace DependancyFinder.Modules.Generator
@@ -12,12 +13,16 @@ namespace DependancyFinder.Modules.Generator
 
     public class DependencyRecursive
     {
-        public static async Task<Dependency> GenerateDependencyAsync(string name)
+        public static async Task<Dependency> GenerateDependencyAsync(string name, string filePath)
         {
+            name = FormatFileName(name);
+            Dependency dependency = new Dependency { Name = name };
             try
             {
-                CustomWriteLine(UsageEnum.Processing, $"Generating Stored Procedures for {name}");
-                string sql = await File.ReadAllTextAsync(FormatFileName(name) + ".sql");
+                CustomWriteLine(UsageEnum.Processing, $"Processing Dependencies {name}");
+                name = FormatFileName(name);
+                // var file = FindFileInFilePath(filePath, name);
+                string sql = await File.ReadAllTextAsync(FindFileInFilePath(filePath, name));
 
                 TSQLTokenizer tokenizer = new TSQLTokenizer(sql);
 
@@ -39,20 +44,18 @@ namespace DependancyFinder.Modules.Generator
                     }
                 }
 
-                Dependency dependency = new Dependency { Name = name };
-
                 foreach (string dep in dependencies)
                 {
-                    dependency.Dependencies[dep] = await GenerateDependencyAsync(dep);
+                    dependency.Dependencies[dep] = await GenerateDependencyAsync(dep, filePath);
                 }
 
-                return dependency;
             }
-            catch (Exception e)
+            catch (FileNotFoundException)
             {
-                CustomWriteLine(UsageEnum.Error, $"Error GenerateDependencyAsync: {e.Message}");
-                throw;
+                CustomWriteLine(UsageEnum.Error, $"Skipping {name} - file not found");
             }
+
+            return dependency;
         }
     }
 }
