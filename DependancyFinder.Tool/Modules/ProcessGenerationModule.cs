@@ -1,7 +1,8 @@
+using DependencyFinder.Tool.Modules.Generator;
 using Newtonsoft.Json;
 using static DependencyFinder.Tool.Modules.EnumModule;
 
-namespace DependencyFinder.Tool.Modules.Generator
+namespace DependencyFinder.Tool.Modules
 {
     public class ProcessGenerationModule
     {

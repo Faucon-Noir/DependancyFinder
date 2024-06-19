@@ -1,14 +1,13 @@
 using FluentValidation;
 
-namespace DependencyFinder.Tool.Modules.Validation
+namespace DependencyFinder.Tool.Modules.Validation;
+
+public class OptionsValidator : AbstractValidator<Options>
 {
-    public class OptionsValidator : AbstractValidator<Options>
+    public OptionsValidator()
     {
-        public OptionsValidator()
-        {
-            RuleFor(x => x.InputPath)
-                .NotEmpty().WithMessage("InputPath is required.")
-                .Must(IsValidFile).WithMessage("InputPath must be a valid SQL file and not empty.");
-        }
+        RuleFor(x => x.InputPath)
+            .NotEmpty().WithMessage("InputPath is required.")
+            .Must(IsValidFile).WithMessage("InputPath must be a valid SQL file and not empty.");
     }
 }
