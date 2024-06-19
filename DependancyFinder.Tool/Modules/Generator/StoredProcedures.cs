@@ -2,6 +2,7 @@ using TSQL;
 using TSQL.Tokens;
 using Newtonsoft.Json;
 using static DependencyFinder.Tool.Modules.EnumModule;
+using DependencyFinder.Tool.Modules.Entities;
 
 
 namespace DependencyFinder.Tool.Modules.Generator
@@ -9,7 +10,7 @@ namespace DependencyFinder.Tool.Modules.Generator
     public class Dependency
     {
         public string Name { get; set; } = string.Empty;
-        public Dictionary<string, Dependency> Dependencies { get; set; } = new Dictionary<string, Dependency>();
+        public Dictionary<string, SPEntity> Dependencies { get; set; } = new Dictionary<string, SPEntity>();
     }
     public class StoredProcedures
     {

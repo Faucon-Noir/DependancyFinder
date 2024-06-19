@@ -1,11 +1,9 @@
-using TSQL;
-using TSQL.Statements;
-using TSQL.Tokens;
+using DependencyFinder.Tool.Modules.Entities;
 using Newtonsoft.Json;
-using System.IO;
-using System.Threading.Tasks;
+using TSQL;
+using TSQL.Tokens;
 using static DependencyFinder.Tool.Modules.EnumModule;
-using System.Text.RegularExpressions;
+using static DependencyFinder.Tool.Modules.Generator.StoredProcedures;
 
 
 namespace DependencyFinder.Tool.Modules.Generator
@@ -13,10 +11,10 @@ namespace DependencyFinder.Tool.Modules.Generator
 
     public class DependencyRecursive
     {
-        public static async Task<Dependency> GenerateDependencyAsync(string name, string filePath)
+        public static async Task<SPEntity> GenerateDependencyAsync(string name, string filePath)
         {
             name = FormatFileName(name);
-            Dependency dependency = new Dependency { Name = name };
+            SPEntity spDependency = new SPEntity { Name = name };
             try
             {
                 CustomWriteLine(UsageEnum.Processing, $"Processing Dependencies {name}");
@@ -42,10 +40,12 @@ namespace DependencyFinder.Tool.Modules.Generator
                         isExecCommand = false;
                     }
                 }
-
+                CustomWriteLine(UsageEnum.Log, $"Adding {dependencies.Any()} to {name}");
                 foreach (string dep in dependencies)
                 {
-                    dependency.Dependencies[dep] = await GenerateDependencyAsync(dep, filePath);
+                    SPEntity spEntity = await GenerateDependencyAsync(dep, filePath);
+                    spDependency.Dependencies?.Add(spEntity);
+                    // spDependency.Dependencies[dep] = await GenerateDependencyAsync(dep, filePath);
                 }
 
             }
@@ -53,8 +53,11 @@ namespace DependencyFinder.Tool.Modules.Generator
             {
                 CustomWriteLine(UsageEnum.Error, $"Skipping {name} - file not found");
             }
-
-            return dependency;
+            CustomWriteLine(UsageEnum.Complete, $"Completed {spDependency.Dependencies?.Count}");
+            // string fileName = SplitFilePath(inputPath).Item2;
+            // Dictionary<string, SPEntity> output = new Dictionary<string, SPEntity> { { FormatFileName(fileName), root } };
+            // string json = JsonConvert.SerializeObject(output, Formatting.Indented);
+            return spDependency;
         }
     }
 }
