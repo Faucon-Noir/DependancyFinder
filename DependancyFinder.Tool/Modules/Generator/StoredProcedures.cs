@@ -1,59 +1,84 @@
 using TSQL;
 using TSQL.Tokens;
-using Newtonsoft.Json;
-using static DependencyFinder.Tool.Modules.EnumModule;
 using DependencyFinder.Tool.Modules.Entities;
+using static DependencyFinder.Tool.Modules.EnumModule;
 
 
 namespace DependencyFinder.Tool.Modules.Generator
 {
-    public class Dependency
-    {
-        public string Name { get; set; } = string.Empty;
-        public Dictionary<string, SPEntity> Dependencies { get; set; } = new Dictionary<string, SPEntity>();
-    }
     public class StoredProcedures
     {
-        public static async Task<string> GenerateStoredProceduresAsync(string inputPath, string outputPath)
+        public static async Task<SPEntity> GenerateStoredProceduresAsync(string inputPath)
         {
-            CustomWriteLine(UsageEnum.Processing, "Generating Stored Procedures");
-            string sql = await File.ReadAllTextAsync(inputPath);
-
-            TSQLTokenizer tokenizer = new TSQLTokenizer(sql);
-
-            List<string> dependencies = new List<string>();
-            bool isExecCommand = false;
-
-            while (tokenizer.MoveNext())
-            {
-                TSQLToken token = tokenizer.Current;
-
-                if (token.Type == TSQLTokenType.Keyword && token.Text.ToUpper() == "EXEC")
-                {
-                    isExecCommand = true;
-                }
-                else if (isExecCommand && token.Type == TSQLTokenType.Identifier)
-                {
-                    dependencies.Add(token.Text);
-                    isExecCommand = false;
-                }
-            }
             string fileName = SplitFilePath(inputPath).Item2;
+            fileName = FormatFileName(fileName);
             string filePath = SplitFilePath(inputPath).Item1;
-
-            Dependency root = new Dependency { Name = fileName };
-
-            foreach (string dep in dependencies)
+            SPEntity root = new SPEntity
             {
-                root.Dependencies[dep] = await DependencyRecursive.GenerateDependencyAsync(dep, filePath);
+                Name = fileName,
+                FilePath = inputPath,
+                Type = SPType.StoreProcedure
+            };
+
+            try
+            {
+                string sql = await File.ReadAllTextAsync(inputPath);
+
+                TSQLTokenizer tokenizer = new TSQLTokenizer(sql);
+
+                HashSet<string> dependencies = new();
+                bool isExecCommand = false;
+
+                while (tokenizer.MoveNext())
+                {
+                    TSQLToken token = tokenizer.Current;
+
+                    if (token.Type == TSQLTokenType.Keyword && string.Equals(token.Text, "EXEC", StringComparison.OrdinalIgnoreCase))
+                    {
+                        isExecCommand = true;
+                    }
+                    else if (isExecCommand && token.Type == TSQLTokenType.Identifier)
+                    {
+                        dependencies.Add(token.Text);
+                        isExecCommand = false;
+                    }
+                }
+
+                // foreach (string dep in dependencies)
+                // {
+                //     var depToFind = FormatFileName(dep);
+                //     var file = FindFileInFilePath(filePath, depToFind);
+                //     root.Dependencies.Add(await GenerateStoredProceduresAsync(file));
+                // }
+                foreach (string dep in dependencies)
+                {
+                    var depToFind = FormatFileName(dep);
+                    var file = FindFileInFilePath(filePath, depToFind);
+                    if (file == "File not found" || file == "Not Found")
+                    {
+                        var spEntity = new SPEntity
+                        {
+                            Name = depToFind,
+                            FilePath = file,
+                            Type = SPType.Unkwon
+                        };
+                        root.Dependencies.Add(spEntity);
+                    }
+                    else
+                    {
+                        var spEntity = await GenerateStoredProceduresAsync(file);
+                        spEntity.Type = SPType.StoreProcedure;
+                        root.Dependencies.Add(spEntity);
+                        // root.Dependencies.Add(await GenerateStoredProceduresAsync(file));
+                    }
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                CustomWriteLine(UsageEnum.Log, $"Skipping {fileName} - file not found");
             }
 
-            Dictionary<string, Dependency> output = new Dictionary<string, Dependency> { { FormatFileName(fileName), root } };
-
-            string json = JsonConvert.SerializeObject(output, Formatting.Indented);
-
-
-            return json;
+            return root;
         }
     }
 }

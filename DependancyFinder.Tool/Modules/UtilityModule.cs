@@ -61,7 +61,7 @@ public class UtilityModule
             bool isValidFile = isValidExtension && isValideContent;
             if (!isValidExtension)
             {
-                CustomWriteLine(UsageEnum.Error, $"File extension {extension} is not supported, please use a valid json or yaml file.");
+                CustomWriteLine(UsageEnum.Error, $"File extension {extension} is not supported, please use a valid sql file.");
                 return false;
             }
             if (!FileExist)
@@ -200,7 +200,6 @@ public class UtilityModule
     /// <returns></returns>
     public static string FormatFileName(string fileName)
     {
-        // CustomWriteLine(UsageEnum.Log, $"Formatting file name: {fileName}");
         // start
         while (fileName.Length > 0 && !char.IsLetterOrDigit(fileName[0]))
         {
@@ -246,7 +245,6 @@ public class UtilityModule
             }
         }
 
-        CustomWriteLine(UsageEnum.Error, $"{name} in {filePath} not found.");
-        return "Not Found";
+        return "File not found";
     }
 }

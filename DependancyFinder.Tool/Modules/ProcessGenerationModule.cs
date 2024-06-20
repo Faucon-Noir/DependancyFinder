@@ -1,6 +1,7 @@
 using DependencyFinder.Tool.Modules.Generator;
-using Newtonsoft.Json;
+using System.Text.Json;
 using static DependencyFinder.Tool.Modules.EnumModule;
+using DependencyFinder.Tool.Modules.Entities;
 
 namespace DependencyFinder.Tool.Modules
 {
@@ -9,9 +10,11 @@ namespace DependencyFinder.Tool.Modules
         public static async Task<Task> ProcessGeneration(Options options)
         {
             string inputPath = options.InputPath;
-            string outputPath = options.OutputPath ?? "./";
+            string outputPath = options.OutputPath;
+
             try
             {
+                CustomWriteLine(UsageEnum.Processing, $"Output {outputPath}");
                 if (Directory.Exists(inputPath))
                 {
                     string[] files = Directory.GetFiles(inputPath, "*.sql");
@@ -20,19 +23,27 @@ namespace DependencyFinder.Tool.Modules
 
                     foreach (string file in files)
                     {
-                        var output = await StoredProcedures.GenerateStoredProceduresAsync(file, outputPath);
-                        var outputJson = JsonConvert.DeserializeObject<Dictionary<string, object>>(output);
+                        var output = await StoredProcedures.GenerateStoredProceduresAsync(file);
+                        string outputString = JsonSerializer.Serialize(output);
+                        var outputJson = JsonSerializer.Deserialize<Dictionary<string, object>>(outputString);
                         allOutputs.Add(SplitFilePath(file).Item2, outputJson!);
                     }
 
-                    string json = JsonConvert.SerializeObject(allOutputs, Formatting.Indented);
+                    string json = JsonSerializer.Serialize(allOutputs, new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
                     IsValidDirectory(outputPath);
                     File.WriteAllText(Path.Combine(outputPath, "all.json"), json);
                 }
                 else
                 {
                     string fileName = SplitFilePath(inputPath).Item2;
-                    string json = await StoredProcedures.GenerateStoredProceduresAsync(inputPath, outputPath);
+                    SPEntity objectToSerialize = await StoredProcedures.GenerateStoredProceduresAsync(inputPath);
+                    string json = JsonSerializer.Serialize(objectToSerialize, new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
                     IsValidDirectory(outputPath);
                     File.WriteAllText(Path.Combine(outputPath, $"{fileName}.json"), json);
                 }
