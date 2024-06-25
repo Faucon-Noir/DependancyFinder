@@ -17,7 +17,7 @@ namespace DependencyFinder.Test.Test
 
             // Assert
             Assert.True(resultForValidDirectory);
-            // On attends que tout les chemins donné y compris vers un fichier soit transmofrmé en chemin de dossier
+            // On attends que tout les chemins fournis y compris vers un fichier soit transformer en chemin de dossier
             Assert.True(resultForInvalidDirectory);
         }
     }

@@ -19,11 +19,11 @@ namespace DependencyFinder.Tool.Modules
                 {
                     string[] files = Directory.GetFiles(inputPath, "*.sql");
 
-                    Dictionary<string, object> allOutputs = new Dictionary<string, object>();
+                    Dictionary<string, object> allOutputs = [];
 
                     foreach (string file in files)
                     {
-                        var output = await StoredProcedures.GenerateStoredProceduresAsync(file);
+                        var output = await SqlAnalyzer.GenerateStoredProceduresAsync(file);
                         string outputString = JsonSerializer.Serialize(output);
                         var outputJson = JsonSerializer.Deserialize<Dictionary<string, object>>(outputString);
                         allOutputs.Add(SplitFilePath(file).Item2, outputJson!);
@@ -39,7 +39,7 @@ namespace DependencyFinder.Tool.Modules
                 else
                 {
                     string fileName = SplitFilePath(inputPath).Item2;
-                    SPEntity objectToSerialize = await StoredProcedures.GenerateStoredProceduresAsync(inputPath);
+                    SPEntity objectToSerialize = await SqlAnalyzer.GenerateStoredProceduresAsync(inputPath);
                     string json = JsonSerializer.Serialize(objectToSerialize, new JsonSerializerOptions
                     {
                         WriteIndented = true

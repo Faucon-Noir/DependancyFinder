@@ -6,7 +6,7 @@ using static DependencyFinder.Tool.Modules.EnumModule;
 
 namespace DependencyFinder.Tool.Modules.Generator
 {
-    public class StoredProcedures
+    public class SqlAnalyzer
     {
         public static async Task<SPEntity> GenerateStoredProceduresAsync(string inputPath)
         {
@@ -44,12 +44,6 @@ namespace DependencyFinder.Tool.Modules.Generator
                     }
                 }
 
-                // foreach (string dep in dependencies)
-                // {
-                //     var depToFind = FormatFileName(dep);
-                //     var file = FindFileInFilePath(filePath, depToFind);
-                //     root.Dependencies.Add(await GenerateStoredProceduresAsync(file));
-                // }
                 foreach (string dep in dependencies)
                 {
                     var depToFind = FormatFileName(dep);
@@ -69,7 +63,6 @@ namespace DependencyFinder.Tool.Modules.Generator
                         var spEntity = await GenerateStoredProceduresAsync(file);
                         spEntity.Type = SPType.StoreProcedure;
                         root.Dependencies.Add(spEntity);
-                        // root.Dependencies.Add(await GenerateStoredProceduresAsync(file));
                     }
                 }
             }

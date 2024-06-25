@@ -1,4 +1,7 @@
 using CommandLine;
+
+namespace DependencyFinder.Tool.Modules;
+
 public class Options
 {
     /// <summary>

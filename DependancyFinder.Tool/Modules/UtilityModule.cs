@@ -17,22 +17,15 @@ public class UtilityModule
     {
         static ConsoleColor GetConsoleColor(UsageEnum usage)
         {
-            switch (usage)
+            return usage switch
             {
-                case UsageEnum.Processing:
-                    return ConsoleColor.Yellow;
-                case UsageEnum.Success:
-                    return ConsoleColor.Green;
-                case UsageEnum.Error:
-                    return ConsoleColor.Red;
-                case UsageEnum.Complete:
-                    return ConsoleColor.Blue;
-                case UsageEnum.Log:
-                    return ConsoleColor.Magenta;
-                default:
-                case UsageEnum.Info:
-                    return ConsoleColor.White;
-            }
+                UsageEnum.Processing => ConsoleColor.Yellow,
+                UsageEnum.Success => ConsoleColor.Green,
+                UsageEnum.Error => ConsoleColor.Red,
+                UsageEnum.Complete => ConsoleColor.Blue,
+                UsageEnum.Log => ConsoleColor.Magenta,
+                _ => ConsoleColor.White,
+            };
         }
         Console.ForegroundColor = GetConsoleColor(usage);
         Console.WriteLine(message);
@@ -119,40 +112,6 @@ public class UtilityModule
         }
         var result = sb.ToString().Replace(" ", "").Replace("-", "").Replace("_", "").Replace("/", "").Replace("\\", "");
         return result;
-    }
-
-    /// <summary>
-    /// Method to format the namespace inside the generated code
-    /// </summary>
-    /// <param name="path"></param>
-    /// <param name="namespaceName"></param>
-    /// <returns></returns>
-    public static string FormatPath(string path, string namespaceName)
-    {
-        try
-        {
-            string pathNamespace;
-            if (!path.EndsWith('/') && !path.EndsWith('\\'))
-            {
-                path += ".";
-            }
-            if (path == null)
-            {
-                pathNamespace = namespaceName;
-            }
-            else
-            {
-                pathNamespace = path.Replace('/', '.').Replace('\\', '.') + namespaceName;
-            }
-            pathNamespace = ToPascalCase(pathNamespace);
-            pathNamespace = pathNamespace.TrimStart('.');
-            return pathNamespace;
-        }
-        catch (Exception e)
-        {
-            CustomWriteLine(UsageEnum.Error, $"FormatPath Error: {e.Message}");
-            return "";
-        }
     }
 
     /// <summary>
