@@ -2,6 +2,7 @@ using DependencyFinder.Tool.Modules.Generator;
 using System.Text.Json;
 using static DependencyFinder.Tool.Modules.EnumModule;
 using DependencyFinder.Tool.Modules.Entities;
+using DependancyFinder.Tool.Modules.ChatController;
 
 namespace DependencyFinder.Tool.Modules
 {
@@ -11,10 +12,12 @@ namespace DependencyFinder.Tool.Modules
         {
             string inputPath = options.InputPath;
             string outputPath = options.OutputPath;
+            bool gptReport = options.GPTReport;
+            Environment.SetEnvironmentVariable("Verbose", options.Verbose.ToString());
 
             try
             {
-                CustomWriteLine(UsageEnum.Processing, $"Output {outputPath}");
+                // Folder processing
                 if (Directory.Exists(inputPath))
                 {
                     string[] files = Directory.GetFiles(inputPath, "*.sql");
@@ -23,7 +26,7 @@ namespace DependencyFinder.Tool.Modules
 
                     foreach (string file in files)
                     {
-                        var output = await SqlAnalyzer.GenerateStoredProceduresAsync(file);
+                        var output = await SqlAnalyzer.AnalyzeSqlAsync(file);
                         string outputString = JsonSerializer.Serialize(output);
                         var outputJson = JsonSerializer.Deserialize<Dictionary<string, object>>(outputString);
                         allOutputs.Add(SplitFilePath(file).Item2, outputJson!);
@@ -36,11 +39,23 @@ namespace DependencyFinder.Tool.Modules
                     IsValidDirectory(outputPath);
                     File.WriteAllText(Path.Combine(outputPath, "all.json"), json);
                 }
+                // Single file processing
                 else
                 {
                     string fileName = SplitFilePath(inputPath).Item2;
-                    SPEntity objectToSerialize = await SqlAnalyzer.GenerateStoredProceduresAsync(inputPath);
-                    string json = JsonSerializer.Serialize(objectToSerialize, new JsonSerializerOptions
+                    SPEntity sqlAnalysisData = await SqlAnalyzer.AnalyzeSqlAsync(inputPath);
+
+                    // On laisse uniquement pour l'objet racine dans un premier temps, on verra pour les enfants plus tard
+                    if (gptReport)
+                    {
+                        SetEnv();
+                        string chatId = Environment.GetEnvironmentVariable("CHAT_ID")!;
+                        string token = Environment.GetEnvironmentVariable("TOKEN")!;
+                        string chatUrl = Environment.GetEnvironmentVariable("CHAT_URL")!;
+                        sqlAnalysisData.GPTReport = await ChatController.SendMessageAsync(chatId, token, File.ReadAllText(inputPath), chatUrl);
+                    }
+
+                    string json = JsonSerializer.Serialize(sqlAnalysisData, new JsonSerializerOptions
                     {
                         WriteIndented = true
                     });

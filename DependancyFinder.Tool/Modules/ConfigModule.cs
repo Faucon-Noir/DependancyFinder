@@ -1,4 +1,5 @@
 using CommandLine;
+using static DependencyFinder.Tool.Modules.EnumModule;
 
 namespace DependencyFinder.Tool.Modules;
 
@@ -15,4 +16,16 @@ public class Options
     /// </summary>
     [Option('o', "output", Required = false, HelpText = "Output directory path.")]
     public string OutputPath { get; set; } = "./Output/";
+
+    /// <summary>
+    /// Define if you want a written report by a GPT model (set your .ENV before, better works)
+    /// </summary>
+    [Option("gpt", Required = false, HelpText = "Define if you want a written report by a GPT model (set your .ENV before, better works)")]
+    public bool GPTReport { get; set; } = false;
+
+    /// <summary>
+    /// Set output verbosity
+    /// </summary>
+    [Option("verbose", Required = false, HelpText = "Set output verbosity")]
+    public UsageEnum Verbose { get; set; } = UsageEnum.Info;
 }

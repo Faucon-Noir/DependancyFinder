@@ -1,0 +1,7 @@
+Je veux que tu notes le morceau de code suivant en fonction des critères suivant. Les notes doivent être comprises entre 0 et 5, et peuvent être des nombres à virgule
+Cette notation doit être suffisament précise pour être utilisable dans un rapport d'audit.
+Pour chaque critère, je veux également une ligne complémentaire qui justifie la notation
+
+Complexité:
+Propreté du code:
+Optimisation:

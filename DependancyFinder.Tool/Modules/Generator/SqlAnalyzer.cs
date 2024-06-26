@@ -8,7 +8,7 @@ namespace DependencyFinder.Tool.Modules.Generator
 {
     public class SqlAnalyzer
     {
-        public static async Task<SPEntity> GenerateStoredProceduresAsync(string inputPath)
+        public static async Task<SPEntity> AnalyzeSqlAsync(string inputPath)
         {
             string fileName = SplitFilePath(inputPath).Item2;
             fileName = FormatFileName(fileName);
@@ -19,7 +19,7 @@ namespace DependencyFinder.Tool.Modules.Generator
                 FilePath = inputPath,
                 Type = SPType.StoreProcedure
             };
-
+            CustomWriteLine(UsageEnum.Log, $"Analyzing {fileName} at {inputPath}");
             try
             {
                 string sql = await File.ReadAllTextAsync(inputPath);
@@ -48,7 +48,7 @@ namespace DependencyFinder.Tool.Modules.Generator
                 {
                     var depToFind = FormatFileName(dep);
                     var file = FindFileInFilePath(filePath, depToFind);
-                    if (file == "File not found" || file == "Not Found")
+                    if (file == "File not found" || file == "Directory not found")
                     {
                         var spEntity = new SPEntity
                         {
@@ -60,7 +60,7 @@ namespace DependencyFinder.Tool.Modules.Generator
                     }
                     else
                     {
-                        var spEntity = await GenerateStoredProceduresAsync(file);
+                        var spEntity = await AnalyzeSqlAsync(file);
                         spEntity.Type = SPType.StoreProcedure;
                         root.Dependencies.Add(spEntity);
                     }

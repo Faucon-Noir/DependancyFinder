@@ -14,6 +14,7 @@ public class Program
         try
         {
             stopwatch.Start();
+            CustomWriteLine(UsageEnum.Info, "--------------------------------------------- Program Start ---------------------------------------------");
             await Parser.Default.ParseArguments<Options>(args).WithParsedAsync(async o =>
            {
                var utilityModule = new UtilityModule();
@@ -30,7 +31,7 @@ public class Program
         }
         catch (Exception e)
         {
-            CustomWriteLine(UsageEnum.Error, $"Error Program: {e.Message}\nCheck {e.TargetSite}");
+            CustomWriteLine(UsageEnum.Error, $"Error Program: {e.Message}");
         }
     }
 }

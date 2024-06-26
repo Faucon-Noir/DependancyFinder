@@ -3,15 +3,15 @@
 public class EnumModule
 {
     /// <summary>
-    /// Enum for the color of the console
+    /// Enum define visibility and color of console messages
     /// </summary>
     public enum UsageEnum
     {
-        Processing,
-        Success,
         Error,
-        Complete,
         Info,
+        Processing,
+        Complete,
+        Success,
         Log
     }
 
