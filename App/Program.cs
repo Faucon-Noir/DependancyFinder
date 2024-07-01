@@ -1,8 +1,9 @@
-﻿global using static DependencyFinder.Tool.Modules.UtilityModule;
+﻿global using static DependencyFinder.App.Utils.Utility;
+using DependencyFinder.App.Utils;
+using DependencyFinder.App;
 using CommandLine;
-using DependencyFinder.Tool.Modules;
 using System.Diagnostics;
-using static DependencyFinder.Tool.Modules.EnumModule;
+using static DependencyFinder.App.Utils.EnumUtils;
 
 namespace DependencyFinder.Tool;
 
@@ -10,19 +11,19 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
-        Stopwatch stopwatch = new Stopwatch();
+        Stopwatch stopwatch = new();
         try
         {
             stopwatch.Start();
             await Parser.Default.ParseArguments<Options>(args).WithParsedAsync(async o =>
            {
-               var utilityModule = new UtilityModule();
-               var errorMessages = utilityModule.EntryValidation(o);
+               var utilityModule = new Utility();
+               var errorMessages = EntryValidation(o);
                foreach (var errorMessage in errorMessages)
                {
                    Console.WriteLine(errorMessage);
                }
-               await ProcessGenerationModule.ProcessGeneration(o);
+               await ProcessAnalyze.ProcessAnalyzeAsync(o);
            });
             stopwatch.Stop();
             CustomWriteLine(UsageEnum.Info, "\n--------------------------------------------- Program Complete ---------------------------------------------");
@@ -30,7 +31,7 @@ public class Program
         }
         catch (Exception e)
         {
-            CustomWriteLine(UsageEnum.Error, $"Error Program: {e.Message}\nCheck {e.TargetSite}");
+            CustomWriteLine(UsageEnum.Error, $"Error Program: {e.Message}");
         }
     }
 }

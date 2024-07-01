@@ -1,4 +1,4 @@
-using DependencyFinder.Tool.Modules;
+using DependencyFinder.App.Utils;
 
 namespace DependencyFinder.Test.Test
 {
@@ -12,12 +12,12 @@ namespace DependencyFinder.Test.Test
             var invalidDirectoryPath = "./TestFolder/demo.json";
 
             // Act
-            var resultForValidDirectory = UtilityModule.IsValidDirectory(validDirectoryPath);
-            var resultForInvalidDirectory = UtilityModule.IsValidDirectory(invalidDirectoryPath);
+            var resultForValidDirectory = Utility.IsValidDirectory(validDirectoryPath);
+            var resultForInvalidDirectory = Utility.IsValidDirectory(invalidDirectoryPath);
 
             // Assert
             Assert.True(resultForValidDirectory);
-            // On attends que tout les chemins donné y compris vers un fichier soit transmofrmé en chemin de dossier
+            // On attends que tout les chemins fournis y compris vers un fichier soit transformer en chemin de dossier
             Assert.True(resultForInvalidDirectory);
         }
     }
