@@ -25,7 +25,7 @@ public class SqlAnalyzer
             if (gptReport)
             {
                 SetEnv();
-                var response = await ChatController.SendMessageAsync(File.ReadAllText(inputPath));
+                var response = await ChatService.SendMessageAsync(File.ReadAllText(inputPath));
                 root.GPTReport = response;
             }
 
@@ -53,6 +53,30 @@ public class SqlAnalyzer
                     {
                         isExecCommand = true;
                     }
+                    else if (token.Text.ToUpperInvariant() == "DROP" && tokenizer.MoveNext())
+                    {
+                        TSQLToken nextToken = tokenizer.Current;
+                        if (nextToken.Type == TSQLTokenType.Keyword && nextToken.Text.ToUpperInvariant() == "TABLE")
+                        {
+                            root.HeavyQueries["DROP TABLE"]++;
+                        }
+                        else if (nextToken.Text.ToUpperInvariant() == "DATABASE")
+                        {
+                            root.HeavyQueries["DROP DATABASE"]++;
+                        }
+                    }
+                    else if (token.Text.ToUpperInvariant() == "ALTER" && tokenizer.MoveNext())
+                    {
+                        TSQLToken nextToken = tokenizer.Current;
+                        if (nextToken.Type == TSQLTokenType.Keyword && nextToken.Text.ToUpperInvariant() == "TABLE")
+                        {
+                            root.HeavyQueries["ALTER TABLE"]++;
+                        }
+                        else if (nextToken.Text.ToUpperInvariant() == "DATABASE")
+                        {
+                            root.HeavyQueries["ALTER DATABASE"]++;
+                        }
+                    }
                 }
                 // Adding dependencies
                 else if (isExecCommand && token.Type == TSQLTokenType.Identifier)
@@ -62,10 +86,10 @@ public class SqlAnalyzer
                 }
             }
 
-            // Logging heavy queries
-            foreach (var commandCount in root.HeavyQueries)
+            // Logging heavy query
+            foreach (var query in root.HeavyQueries)
             {
-                CustomWriteLine(UsageEnum.Log, $"{commandCount.Key}: {commandCount.Value}");
+                CustomWriteLine(UsageEnum.Log, $"{query.Key}: {query.Value}");
             }
 
             // Recursive for dependencies

@@ -39,8 +39,10 @@ public class SPEntity
         ["DELETE"] = 0,
         ["INSERT"] = 0,
         ["MERGE"] = 0,
-        ["DROP"] = 0,
-        ["ALTER"] = 0
+        ["DROP TABLE"] = 0,
+        ["DROP DATBASE"] = 0,
+        ["ALTER TABLE"] = 0,
+        ["ALTER DATABASE"] = 0
     };
 
     /// <summary>

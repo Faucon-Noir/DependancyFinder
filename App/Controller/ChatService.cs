@@ -7,7 +7,7 @@ using static DependencyFinder.App.Utils.EnumUtils;
 
 namespace DependencyFinder.App.Controller;
 
-public class ChatController
+public class ChatService
 {
     /// <summary>
     /// Method to send file to C2S GPT and get quality report
@@ -45,11 +45,11 @@ public class ChatController
                 }
             };
             var requestContent = new StringContent(JsonSerializer.Serialize(chatDto), Encoding.UTF8, "application/json");
-            ChatControllerHelpers.
+            ChatServiceHelpers.
                         _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             
             // Send message to chat
-            var response = await ChatControllerHelpers._httpClient.PostAsync(requestUri, requestContent);
+            var response = await ChatServiceHelpers._httpClient.PostAsync(requestUri, requestContent);
 
             // Wait for 10 seconds to get response, due to the delay the chat can have
             await Task.Delay(10000);
@@ -59,7 +59,7 @@ public class ChatController
                 CustomWriteLine(UsageEnum.Log, chatResponse);
 
                 // Get chat response
-                var json = await ChatControllerHelpers._httpClient.GetAsync(chatResponse);
+                var json = await ChatServiceHelpers._httpClient.GetAsync(chatResponse);
 
                 if (json.IsSuccessStatusCode)
                 {
