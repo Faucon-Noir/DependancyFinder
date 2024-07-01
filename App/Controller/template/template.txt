@@ -1,0 +1,12 @@
+Je veux que tu notes le morceau de code suivant en fonction des critères suivant. Les notes doivent être comprises entre 0 et 5, et peuvent être des nombres à virgule
+Cette notation doit être suffisament précise pour être utilisable dans un rapport d'audit.
+Pour chaque critère, je veux également une ligne complémentaire qui justifie la notation.
+La réponse doit être courte mais précise et au format texte.
+Tu dois également conserver les précisions entre parenthèse.
+Remplace tous les caractères un peu spéciaux (par exemple é, è etc) par la lettre de base (par exemple, é devient e)
+
+Complexité (plus haut = moins bien): /5
+Propreté du code (plus haut = mieux): /5
+Optimisation (plus haut = mieux): /5
+
+Tu devras ensuite rajouter une ligne qui donnera une estimation du temps d'exécution du bloc, en admettant qu'il y a 1000 entrées à traiter.

@@ -1,6 +1,6 @@
 # File created using '.gitignore Generator' for Visual Studio Code: https://bit.ly/vscode-gig
-# Created by https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,csharp,visualstudio
-# Edit at https://www.toptal.com/developers/gitignore?templates=windows,visualstudiocode,csharp,visualstudio
+# Created by https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,visualstudio,csharp,dotenv
+# Edit at https://www.toptal.com/developers/gitignore?templates=windows,visualstudiocode,visualstudio,csharp,dotenv
 
 ### Csharp ###
 ## Ignore Visual Studio temporary files, build results, and
@@ -400,6 +400,9 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
+### dotenv ###
+.env
+
 ### VisualStudioCode ###
 !.vscode/*.code-snippets
 
@@ -615,8 +618,10 @@ $RECYCLE.BIN/
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
 
-# End of https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,csharp,visualstudio
+# End of https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,visualstudio,csharp,dotenv
 
 # Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
+
 dbo.*
 Output/
+COMETE_PS/

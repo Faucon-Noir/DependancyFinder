@@ -13,4 +13,9 @@
     <PackageReference Include="TSQL.Depends" Version="1.1.0" />
     <PackageReference Include="TSQL.Parser" Version="2.6.0" />
     </ItemGroup>
+<ItemGroup>
+  <None Update=".env">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+  </None>
+</ItemGroup>
 </Project>

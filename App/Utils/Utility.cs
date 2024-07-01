@@ -1,12 +1,10 @@
-using System.Globalization;
-using System.Text;
+using DependencyFinder.App.Validation;
 using System.Text.RegularExpressions;
-using DependencyFinder.Tool.Modules.Validation;
-using static DependencyFinder.Tool.Modules.EnumModule;
+using static DependencyFinder.App.Utils.EnumUtils;
 
-namespace DependencyFinder.Tool.Modules;
+namespace DependencyFinder.App.Utils;
 
-public class UtilityModule
+public partial class Utility
 {
     /// <summary>
     /// Custom WriteLine method to write messages in different colors on a single line of code
@@ -15,6 +13,10 @@ public class UtilityModule
     /// <param name="message"></param>
     public static void CustomWriteLine(UsageEnum usage, string message)
     {
+        // Get the verbosity level from the environment variable
+        Enum.TryParse(Environment.GetEnvironmentVariable("Verbose"), out UsageEnum usageEnum);
+
+        // Get the console color based on the verbosity level
         static ConsoleColor GetConsoleColor(UsageEnum usage)
         {
             return usage switch
@@ -27,31 +29,42 @@ public class UtilityModule
                 _ => ConsoleColor.White,
             };
         }
-        Console.ForegroundColor = GetConsoleColor(usage);
-        Console.WriteLine(message);
-        Console.ForegroundColor = ConsoleColor.White;
+        if (usage <= usageEnum)
+        {
+            Console.ForegroundColor = GetConsoleColor(usage);
+            Console.WriteLine(message);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
     }
 
     /// <summary>
     /// HashSet to store the valid file extensions
     /// </summary>
-    private static readonly HashSet<string> validExtensions = new HashSet<string> { ".sql" };
+    private static readonly HashSet<string> validExtensions = [".sql"];
 
     /// <summary>
-    /// Method to verify if the file exists and if the extension is supported
+    /// Method to verify if the file exists and if the extension is supported. Support directory as well
     /// </summary>
     /// <param name="filePath"></param>
     /// <returns></returns>
-    public static bool IsValidFile(string filePath)
+    public static bool IsValidPath(string filePath)
     {
         try
         {
+            // Check file
             string extension = Path.GetExtension(filePath);
             bool isValidExtension = validExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase);
             bool FileExist = File.Exists(filePath);
             var NotEmptyFile = File.ReadAllText(filePath).Length > 0;
             bool isValideContent = FileExist && NotEmptyFile;
-            bool isValidFile = isValidExtension && isValideContent;
+
+            // Check folder
+            string directory = Path.GetDirectoryName(filePath)!;
+            bool isValidDirectory = Directory.Exists(directory);
+            bool hasSqlFiles = Directory.GetFiles(directory, "*.sql").Length > 0;
+
+            bool isValidPath = isValidExtension && isValideContent || isValidDirectory && hasSqlFiles;
             if (!isValidExtension)
             {
                 CustomWriteLine(UsageEnum.Error, $"File extension {extension} is not supported, please use a valid sql file.");
@@ -67,11 +80,12 @@ public class UtilityModule
                 CustomWriteLine(UsageEnum.Error, $"File {filePath} is empty.");
                 return false;
             }
-            return isValidFile;
+            CustomWriteLine(UsageEnum.Success, $"Path {filePath} is valid.");
+            return isValidPath;
         }
         catch (Exception e)
         {
-            CustomWriteLine(UsageEnum.Error, $"IsValidFile Error: {e.Message}");
+            CustomWriteLine(UsageEnum.Error, $"IsValidPath Error: {e.Message}");
             return false;
         }
     }
@@ -83,35 +97,27 @@ public class UtilityModule
     /// <returns></returns>
     public static bool IsValidDirectory(string directoryPath)
     {
-        if (Directory.Exists(directoryPath))
+        try
         {
-            return true;
+            if (Directory.Exists(directoryPath))
+            {
+                CustomWriteLine(UsageEnum.Success, $"Directory {directoryPath} exists.");
+                return true;
+            }
+            else
+            {
+                CustomWriteLine(UsageEnum.Processing, "Creating directory...");
+                Directory.CreateDirectory(directoryPath);
+                CustomWriteLine(UsageEnum.Complete, $"Directory {directoryPath} created.");
+                IsValidDirectory(directoryPath);
+                return false;
+            }
         }
-        else
+        catch (Exception e)
         {
-            CustomWriteLine(UsageEnum.Processing, "Creating directory...");
-            Directory.CreateDirectory(directoryPath);
-            IsValidDirectory(directoryPath);
+            CustomWriteLine(UsageEnum.Error, $"IsValidDirectory Error: {e.Message}");
             return false;
         }
-    }
-
-    /// <summary>
-    /// Method to convert a string to PascalCase
-    /// </summary>
-    /// <param name="text"></param>
-    /// <returns></returns>
-    public static string ToPascalCase(string text)
-    {
-        var match = Regex.Match(text, "^(?<word>^[a-z_.-/\\\\ -]+|[A-Z_.-/\\\\ -]+|[A-Z][a-z_.-/\\\\ -]+)+$");
-        var groups = match.Groups["word"];
-        var sb = new StringBuilder();
-        foreach (var capture in groups.Captures.Cast<Capture>())
-        {
-            sb.Append(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(capture.Value.ToLower()));
-        }
-        var result = sb.ToString().Replace(" ", "").Replace("-", "").Replace("_", "").Replace("/", "").Replace("\\", "");
-        return result;
     }
 
     /// <summary>
@@ -119,7 +125,7 @@ public class UtilityModule
     /// </summary>
     /// <param name="o"></param>
     /// <returns></returns>
-    public List<string> EntryValidation(Options o)
+    public static List<string> EntryValidation(Options o)
     {
         var OptionValidation = new Options
         {
@@ -135,6 +141,10 @@ public class UtilityModule
             {
                 errorMessages.Add($"Property {failure.PropertyName} failed validation. Error was: {failure.ErrorMessage}");
             }
+        }
+        else
+        {
+            CustomWriteLine(UsageEnum.Success, "Options are valid.");
         }
         return errorMessages;
     }
@@ -162,12 +172,12 @@ public class UtilityModule
         // start
         while (fileName.Length > 0 && !char.IsLetterOrDigit(fileName[0]))
         {
-            fileName = fileName.Substring(1);
+            fileName = fileName[1..];
         }
         // end
         while (fileName.Length > 0 && !char.IsLetterOrDigit(fileName[^1]))
         {
-            fileName = fileName.Substring(0, fileName.Length - 1);
+            fileName = fileName[..^1];
         }
 
         // If the string is still empty after removing non-letter/digit characters, throw an exception
@@ -175,6 +185,8 @@ public class UtilityModule
         {
             throw new ArgumentException($"File name does not contain any valid characters.");
         }
+
+        CustomWriteLine(UsageEnum.Complete, $"File name formatted to {fileName}.");
         return fileName;
     }
 
@@ -185,25 +197,66 @@ public class UtilityModule
     /// <param name="name"></param>
     public static string FindFileInFilePath(string filePath, string name)
     {
-        if (!Directory.Exists(filePath))
+        try
         {
-            CustomWriteLine(UsageEnum.Error, $"Directory {filePath} does not exist.");
-            return "Not Found";
+            if (!Directory.Exists(filePath))
+            {
+                CustomWriteLine(UsageEnum.Error, $"Directory {filePath} does not exist.");
+                return "Directory not found";
+            }
+
+            Regex regex = new(@$"\b{name}\b", RegexOptions.IgnoreCase);
+
+            var files = Directory.GetFiles(filePath);
+            foreach (var file in files)
+            {
+                string fileName = Path.GetFileName(file);
+                Match match = regex.Match(fileName);
+                if (match.Success)
+                {
+                    CustomWriteLine(UsageEnum.Success, $"File {file} found.");
+                    return file;
+                }
+            }
+
+            return "File not found";
+        }
+        catch (Exception e)
+        {
+            CustomWriteLine(UsageEnum.Error, $"FindFileInFilePath Error: {e.Message}");
+            return e.Message;
+        }
+    }
+
+    /// <summary>
+    /// Method to load the environment variables from the .env file
+    /// </summary>
+    public static void SetEnv()
+    {
+        string basePath = AppDomain.CurrentDomain.BaseDirectory;
+        string path = Path.Combine(basePath, ".env");
+
+        if (!File.Exists(path))
+        {
+            CustomWriteLine(UsageEnum.Error, $"Env file not found at {path}");
+            return;
         }
 
-        Regex regex = new Regex(@$"\b{name}\b", RegexOptions.IgnoreCase);
-
-        var files = Directory.GetFiles(filePath);
-        foreach (var file in files)
+        var lines = File.ReadAllLines(path);
+        foreach (var line in lines)
         {
-            string fileName = Path.GetFileName(file);
-            Match match = regex.Match(fileName);
-            if (match.Success)
+            if (line.Contains('='))
             {
-                return file;
+                var parts = line.Split('=', 2);
+                if (parts.Length == 2)
+                {
+                    var key = parts[0].Trim();
+                    var value = parts[1].Trim();
+                    Environment.SetEnvironmentVariable(key, value);
+                    CustomWriteLine(UsageEnum.Log, $"Loaded {key}: {value}");
+                }
             }
         }
-
-        return "File not found";
     }
+
 }
