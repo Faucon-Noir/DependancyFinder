@@ -1,8 +1,8 @@
+using DependencyFinder.App.Validation;
 using System.Text.RegularExpressions;
-using DependencyFinder.Tool.Validation;
-using static DependencyFinder.Tool.Utils.Enum;
+using static DependencyFinder.App.Utils.EnumUtils;
 
-namespace DependencyFinder.Tool.Utils;
+namespace DependencyFinder.App.Utils;
 
 public partial class Utility
 {

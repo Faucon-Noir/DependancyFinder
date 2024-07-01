@@ -1,4 +1,4 @@
-﻿namespace DependencyFinder.Tool.Entities;
+﻿namespace DependencyFinder.App.Entities;
 
 /// <summary>
 /// Entity class for stored procedures

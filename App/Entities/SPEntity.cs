@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
-using static DependencyFinder.Tool.Utils.Enum;
+using static DependencyFinder.App.Utils.EnumUtils;
 
-namespace DependencyFinder.Tool.Entities;
+namespace DependencyFinder.App.Entities;
 
 /// <summary>
 /// Entity class for stored procedures

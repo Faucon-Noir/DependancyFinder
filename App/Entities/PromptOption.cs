@@ -1,4 +1,4 @@
-namespace DependencyFinder.Tool.Entities;
+namespace DependencyFinder.App.Entities;
 
 public class PromptOption
 {

@@ -1,16 +1,15 @@
+using DependencyFinder.App.Analyzer;
+using DependencyFinder.App.Entities;
+using DependencyFinder.App.Utils;
 using System.Text.Json;
-using static DependencyFinder.Tool.Utils.Enum;
-using DependencyFinder.Tool.Controller;
-using DependencyFinder.Tool.Entities;
-using DependencyFinder.Tool.Generator;
-using DependencyFinder.Tool.Utils;
-using System.Text.RegularExpressions;
+using static DependencyFinder.App.Utils.EnumUtils;
 
-namespace DependencyFinder.Tool;
 
-public class Process
+namespace DependencyFinder.App;
+
+public class ProcessAnalyze
 {
-    public static async Task<Task> ProcessAnalyze(Options options)
+    public static async Task<Task> ProcessAnalyzeAsync(Options options)
     {
         string inputPath = options.InputPath;
         string outputPath = options.OutputPath;

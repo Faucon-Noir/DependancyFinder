@@ -1,7 +1,7 @@
-using DependencyFinder.Tool.Utils;
+using DependencyFinder.App.Utils;
 using FluentValidation;
 
-namespace DependencyFinder.Tool.Validation;
+namespace DependencyFinder.App.Validation;
 
 public class OptionsValidator : AbstractValidator<Options>
 {

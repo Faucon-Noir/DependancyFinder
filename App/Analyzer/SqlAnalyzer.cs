@@ -1,11 +1,10 @@
+using DependencyFinder.App.Controller;
+using DependencyFinder.App.Entities;
 using TSQL;
 using TSQL.Tokens;
-using static DependencyFinder.Tool.Utils.Enum;
-using DependencyFinder.Tool.Entities;
-using DependencyFinder.Tool.Controller;
+using static DependencyFinder.App.Utils.EnumUtils;
 
-
-namespace DependencyFinder.Tool.Generator;
+namespace DependencyFinder.App.Analyzer;
 
 public class SqlAnalyzer
 {

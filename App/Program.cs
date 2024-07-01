@@ -1,8 +1,9 @@
-﻿global using static DependencyFinder.Tool.Utils.Utility;
+﻿global using static DependencyFinder.App.Utils.Utility;
+using DependencyFinder.App.Utils;
+using DependencyFinder.App;
 using CommandLine;
-using DependencyFinder.Tool.Utils;
 using System.Diagnostics;
-using static DependencyFinder.Tool.Utils.Enum;
+using static DependencyFinder.App.Utils.EnumUtils;
 
 namespace DependencyFinder.Tool;
 
@@ -22,7 +23,7 @@ public class Program
                {
                    Console.WriteLine(errorMessage);
                }
-               await Process.ProcessAnalyze(o);
+               await ProcessAnalyze.ProcessAnalyzeAsync(o);
            });
             stopwatch.Stop();
             CustomWriteLine(UsageEnum.Info, "\n--------------------------------------------- Program Complete ---------------------------------------------");

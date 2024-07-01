@@ -1,10 +1,11 @@
+using DependencyFinder.App.Entities;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using DependencyFinder.Tool.Entities;
-using static DependencyFinder.Tool.Utils.Enum;
+using static DependencyFinder.App.Utils.EnumUtils;
 
-namespace DependencyFinder.Tool.Controller;
+
+namespace DependencyFinder.App.Controller;
 
 public class ChatController
 {
