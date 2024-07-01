@@ -1,4 +1,5 @@
 # File created using '.gitignore Generator' for Visual Studio Code: https://bit.ly/vscode-gig
+
 # Created by https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,visualstudio,csharp,dotenv
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,visualstudiocode,visualstudio,csharp,dotenv
 
@@ -400,6 +401,7 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
+
 ### dotenv ###
 .env
 
@@ -624,4 +626,4 @@ $RECYCLE.BIN/
 
 dbo.*
 Output/
-COMETE_PS/
+
