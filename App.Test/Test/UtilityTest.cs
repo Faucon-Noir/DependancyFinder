@@ -12,8 +12,8 @@ namespace DependencyFinder.Test.Test
             var invalidDirectoryPath = "./TestFolder/demo.json";
 
             // Act
-            var resultForValidDirectory = UtilityModule.IsValidDirectory(validDirectoryPath);
-            var resultForInvalidDirectory = UtilityModule.IsValidDirectory(invalidDirectoryPath);
+            var resultForValidDirectory = Utility.IsValidDirectory(validDirectoryPath);
+            var resultForInvalidDirectory = Utility.IsValidDirectory(invalidDirectoryPath);
 
             // Assert
             Assert.True(resultForValidDirectory);
