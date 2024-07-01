@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "DependencyFinder.Tool": {
+      "commandName": "Project",
+      "commandLineArgs": "--input F:\\Comete_PS\\dbo.Ps_SendMailErrorProcedure.StoredProcedure.sql --gpt --verbose Processing",
+      "workingDirectory": "C:\\Athena\\DependancyFinder"
+    }
+  }
+}

@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DependancyFinder.Tool\DependencyFinder.Tool.csproj" />
+    <ProjectReference Include="..\DependancyFinder.Tool\App.csproj" />
   </ItemGroup>
 
   <ItemGroup>

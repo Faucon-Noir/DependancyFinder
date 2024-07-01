@@ -1,12 +1,10 @@
-using System.Globalization;
-using System.Text;
 using System.Text.RegularExpressions;
-using DependencyFinder.Tool.Modules.Validation;
-using static DependencyFinder.Tool.Modules.EnumModule;
+using DependencyFinder.Tool.Validation;
+using static DependencyFinder.Tool.Utils.Enum;
 
-namespace DependencyFinder.Tool.Modules;
+namespace DependencyFinder.Tool.Utils;
 
-public class UtilityModule
+public partial class Utility
 {
     /// <summary>
     /// Custom WriteLine method to write messages in different colors on a single line of code
@@ -16,8 +14,7 @@ public class UtilityModule
     public static void CustomWriteLine(UsageEnum usage, string message)
     {
         // Get the verbosity level from the environment variable
-        UsageEnum usageEnum;
-        Enum.TryParse(Environment.GetEnvironmentVariable("Verbose"), out usageEnum);
+        Enum.TryParse(Environment.GetEnvironmentVariable("Verbose"), out UsageEnum usageEnum);
 
         // Get the console color based on the verbosity level
         static ConsoleColor GetConsoleColor(UsageEnum usage)
@@ -44,7 +41,7 @@ public class UtilityModule
     /// <summary>
     /// HashSet to store the valid file extensions
     /// </summary>
-    private static readonly HashSet<string> validExtensions = new HashSet<string> { ".sql" };
+    private static readonly HashSet<string> validExtensions = [".sql"];
 
     /// <summary>
     /// Method to verify if the file exists and if the extension is supported. Support directory as well
@@ -67,7 +64,7 @@ public class UtilityModule
             bool isValidDirectory = Directory.Exists(directory);
             bool hasSqlFiles = Directory.GetFiles(directory, "*.sql").Length > 0;
 
-            bool isValidPath = (isValidExtension && isValideContent) || (isValidDirectory && hasSqlFiles);
+            bool isValidPath = isValidExtension && isValideContent || isValidDirectory && hasSqlFiles;
             if (!isValidExtension)
             {
                 CustomWriteLine(UsageEnum.Error, $"File extension {extension} is not supported, please use a valid sql file.");
@@ -128,7 +125,7 @@ public class UtilityModule
     /// </summary>
     /// <param name="o"></param>
     /// <returns></returns>
-    public List<string> EntryValidation(Options o)
+    public static List<string> EntryValidation(Options o)
     {
         var OptionValidation = new Options
         {
@@ -175,12 +172,12 @@ public class UtilityModule
         // start
         while (fileName.Length > 0 && !char.IsLetterOrDigit(fileName[0]))
         {
-            fileName = fileName.Substring(1);
+            fileName = fileName[1..];
         }
         // end
         while (fileName.Length > 0 && !char.IsLetterOrDigit(fileName[^1]))
         {
-            fileName = fileName.Substring(0, fileName.Length - 1);
+            fileName = fileName[..^1];
         }
 
         // If the string is still empty after removing non-letter/digit characters, throw an exception
@@ -208,7 +205,7 @@ public class UtilityModule
                 return "Directory not found";
             }
 
-            Regex regex = new Regex(@$"\b{name}\b", RegexOptions.IgnoreCase);
+            Regex regex = new(@$"\b{name}\b", RegexOptions.IgnoreCase);
 
             var files = Directory.GetFiles(filePath);
             foreach (var file in files)
@@ -261,4 +258,5 @@ public class UtilityModule
             }
         }
     }
+
 }

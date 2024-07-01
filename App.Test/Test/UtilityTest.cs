@@ -1,4 +1,4 @@
-using DependencyFinder.Tool.Modules;
+using DependencyFinder.Tool.Utils;
 
 namespace DependencyFinder.Test.Test
 {

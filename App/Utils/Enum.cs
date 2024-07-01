@@ -1,6 +1,6 @@
-﻿namespace DependencyFinder.Tool.Modules;
+﻿namespace DependencyFinder.Tool.Utils;
 
-public class EnumModule
+public class Enum
 {
     /// <summary>
     /// Enum define visibility and color of console messages

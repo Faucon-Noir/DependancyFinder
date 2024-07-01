@@ -1,8 +1,8 @@
-﻿global using static DependencyFinder.Tool.Modules.UtilityModule;
+﻿global using static DependencyFinder.Tool.Utils.Utility;
 using CommandLine;
-using DependencyFinder.Tool.Modules;
+using DependencyFinder.Tool.Utils;
 using System.Diagnostics;
-using static DependencyFinder.Tool.Modules.EnumModule;
+using static DependencyFinder.Tool.Utils.Enum;
 
 namespace DependencyFinder.Tool;
 
@@ -10,20 +10,19 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
-        Stopwatch stopwatch = new Stopwatch();
+        Stopwatch stopwatch = new();
         try
         {
             stopwatch.Start();
-            CustomWriteLine(UsageEnum.Info, "--------------------------------------------- Program Start ---------------------------------------------");
             await Parser.Default.ParseArguments<Options>(args).WithParsedAsync(async o =>
            {
-               var utilityModule = new UtilityModule();
-               var errorMessages = utilityModule.EntryValidation(o);
+               var utilityModule = new Utility();
+               var errorMessages = EntryValidation(o);
                foreach (var errorMessage in errorMessages)
                {
                    Console.WriteLine(errorMessage);
                }
-               await ProcessGenerationModule.ProcessGeneration(o);
+               await Process.ProcessAnalyze(o);
            });
             stopwatch.Stop();
             CustomWriteLine(UsageEnum.Info, "\n--------------------------------------------- Program Complete ---------------------------------------------");
