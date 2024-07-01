@@ -17,7 +17,7 @@ public class Program
             stopwatch.Start();
             await Parser.Default.ParseArguments<Options>(args).WithParsedAsync(async o =>
            {
-               var utilityModule = new Utility();
+               Utility utilityModule = new();
                var errorMessages = EntryValidation(o);
                foreach (var errorMessage in errorMessages)
                {

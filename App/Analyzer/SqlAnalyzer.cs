@@ -17,7 +17,7 @@ public class SqlAnalyzer
         {
             Name = fileName,
             FilePath = inputPath,
-            Type = SPType.StoreProcedure
+            Type = SPType.StoreProcedure,
         };
         CustomWriteLine(UsageEnum.Log, $"Analyzing {fileName} at {inputPath}");
         try
@@ -25,7 +25,7 @@ public class SqlAnalyzer
             if (gptReport)
             {
                 SetEnv();
-                var response = await ChatController.SendMessageAsync(File.ReadAllText(inputPath));
+                var response = await ChatService.SendMessageAsync(File.ReadAllText(inputPath));
                 root.GPTReport = response;
             }
 
@@ -39,10 +39,46 @@ public class SqlAnalyzer
             {
                 TSQLToken token = tokenizer.Current;
 
-                if (token.Type == TSQLTokenType.Keyword && string.Equals(token.Text, "EXEC", StringComparison.OrdinalIgnoreCase))
+                // Analyze basic commands
+                if (token.Type == TSQLTokenType.Keyword)
                 {
-                    isExecCommand = true;
+                    // Finding basic commands
+                    string tokenTextUpper = token.Text.ToUpperInvariant();
+                    if (root.HeavyQueries.TryGetValue(tokenTextUpper, out int value))
+                    {
+                        root.HeavyQueries[tokenTextUpper] = ++value;
+                    }
+                    // Finding dependencies
+                    else if (tokenTextUpper == "EXEC")
+                    {
+                        isExecCommand = true;
+                    }
+                    else if (token.Text.ToUpperInvariant() == "DROP" && tokenizer.MoveNext())
+                    {
+                        TSQLToken nextToken = tokenizer.Current;
+                        if (nextToken.Type == TSQLTokenType.Keyword && nextToken.Text.ToUpperInvariant() == "TABLE")
+                        {
+                            root.HeavyQueries["DROP TABLE"]++;
+                        }
+                        else if (nextToken.Text.ToUpperInvariant() == "DATABASE")
+                        {
+                            root.HeavyQueries["DROP DATABASE"]++;
+                        }
+                    }
+                    else if (token.Text.ToUpperInvariant() == "ALTER" && tokenizer.MoveNext())
+                    {
+                        TSQLToken nextToken = tokenizer.Current;
+                        if (nextToken.Type == TSQLTokenType.Keyword && nextToken.Text.ToUpperInvariant() == "TABLE")
+                        {
+                            root.HeavyQueries["ALTER TABLE"]++;
+                        }
+                        else if (nextToken.Text.ToUpperInvariant() == "DATABASE")
+                        {
+                            root.HeavyQueries["ALTER DATABASE"]++;
+                        }
+                    }
                 }
+                // Adding dependencies
                 else if (isExecCommand && token.Type == TSQLTokenType.Identifier)
                 {
                     dependencies.Add(token.Text);
@@ -50,6 +86,13 @@ public class SqlAnalyzer
                 }
             }
 
+            // Logging heavy query
+            foreach (var query in root.HeavyQueries)
+            {
+                CustomWriteLine(UsageEnum.Log, $"{query.Key}: {query.Value}");
+            }
+
+            // Recursive for dependencies
             foreach (string dep in dependencies)
             {
                 var depToFind = FormatFileName(dep);

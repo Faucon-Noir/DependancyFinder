@@ -7,8 +7,13 @@ using static DependencyFinder.App.Utils.EnumUtils;
 
 namespace DependencyFinder.App.Controller;
 
-public class ChatController
+public class ChatService
 {
+    /// <summary>
+    /// Method to send file to C2S GPT and get quality report
+    /// </summary>
+    /// <param name="chatMessage"></param>
+    /// <returns></returns>
     public static async Task<string> SendMessageAsync(string chatMessage)
     {
         string chatId = Environment.GetEnvironmentVariable("CHAT_ID")!;
@@ -24,6 +29,7 @@ public class ChatController
 {chatMessage}
 ```";
             string signalRId = Environment.GetEnvironmentVariable("SIGNALR_ID")!;
+            // Initialize chat DTO
             ChatDTO chatDto = new()
             {
                 ChatId = chatId,
@@ -39,23 +45,27 @@ public class ChatController
                 }
             };
             var requestContent = new StringContent(JsonSerializer.Serialize(chatDto), Encoding.UTF8, "application/json");
-            ChatControllerHelpers.
+            ChatServiceHelpers.
                         _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            
+            // Send message to chat
+            var response = await ChatServiceHelpers._httpClient.PostAsync(requestUri, requestContent);
 
-            var response = await ChatControllerHelpers._httpClient.PostAsync(requestUri, requestContent);
+            // Wait for 10 seconds to get response, due to the delay the chat can have
             await Task.Delay(10000);
             if (response.IsSuccessStatusCode)
             {
                 string chatResponse = Environment.GetEnvironmentVariable("CHAT_RESPONSE")!;
                 CustomWriteLine(UsageEnum.Log, chatResponse);
-                var json = await ChatControllerHelpers._httpClient.GetAsync(chatResponse);
 
+                // Get chat response
+                var json = await ChatServiceHelpers._httpClient.GetAsync(chatResponse);
 
                 if (json.IsSuccessStatusCode)
                 {
                     var jsonResponse = await json.Content.ReadFromJsonAsync<List<Message>>();
-                    var message = jsonResponse?.LastOrDefault()?.Message1; //?? "No message";
-                    return message?.ToString() ?? "NoMessage";
+                    var message = jsonResponse?.LastOrDefault()?.Message1;
+                    return message?.ToString() ?? "No Message";
                 }
                 else
                 {

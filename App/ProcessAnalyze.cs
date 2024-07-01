@@ -1,6 +1,7 @@
 using DependencyFinder.App.Analyzer;
 using DependencyFinder.App.Entities;
 using DependencyFinder.App.Utils;
+using System.Globalization;
 using System.Text.Json;
 using static DependencyFinder.App.Utils.EnumUtils;
 
@@ -14,7 +15,12 @@ public class ProcessAnalyze
         string inputPath = options.InputPath;
         string outputPath = options.OutputPath;
         bool gptReport = options.GPTReport;
-        Environment.SetEnvironmentVariable("Verbose", options.Verbose.ToString());
+
+        // setup verbose
+        TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+        Environment.SetEnvironmentVariable("Verbose", textInfo.ToTitleCase(options.Verbose.ToString()));
+
+        // setup Json Serializer
         JsonSerializerOptions jsonSerializerOptions = new()
         {
             WriteIndented = true
@@ -46,9 +52,6 @@ public class ProcessAnalyze
             {
                 string fileName = SplitFilePath(inputPath).Item2;
                 SPEntity sqlAnalysisData = await SqlAnalyzer.AnalyzeSqlAsync(inputPath, gptReport);
-
-                // On laisse uniquement pour l'objet racine dans un premier temps, on verra pour les enfants plus tard
-
 
                 string json = JsonSerializer.Serialize(sqlAnalysisData, jsonSerializerOptions);
                 IsValidDirectory(outputPath);
