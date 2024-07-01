@@ -17,7 +17,7 @@ public class SqlAnalyzer
         {
             Name = fileName,
             FilePath = inputPath,
-            Type = SPType.StoreProcedure
+            Type = SPType.StoreProcedure,
         };
         CustomWriteLine(UsageEnum.Log, $"Analyzing {fileName} at {inputPath}");
         try
@@ -39,10 +39,22 @@ public class SqlAnalyzer
             {
                 TSQLToken token = tokenizer.Current;
 
-                if (token.Type == TSQLTokenType.Keyword && string.Equals(token.Text, "EXEC", StringComparison.OrdinalIgnoreCase))
+                // Analyze basic commands
+                if (token.Type == TSQLTokenType.Keyword)
                 {
-                    isExecCommand = true;
+                    // Finding basic commands
+                    string tokenTextUpper = token.Text.ToUpperInvariant();
+                    if (root.HeavyQueries.TryGetValue(tokenTextUpper, out int value))
+                    {
+                        root.HeavyQueries[tokenTextUpper] = ++value;
+                    }
+                    // Finding dependencies
+                    else if (tokenTextUpper == "EXEC")
+                    {
+                        isExecCommand = true;
+                    }
                 }
+                // Adding dependencies
                 else if (isExecCommand && token.Type == TSQLTokenType.Identifier)
                 {
                     dependencies.Add(token.Text);
@@ -50,6 +62,13 @@ public class SqlAnalyzer
                 }
             }
 
+            // Logging heavy queries
+            foreach (var commandCount in root.HeavyQueries)
+            {
+                CustomWriteLine(UsageEnum.Log, $"{commandCount.Key}: {commandCount.Value}");
+            }
+
+            // Recursive for dependencies
             foreach (string dep in dependencies)
             {
                 var depToFind = FormatFileName(dep);

@@ -27,5 +27,5 @@ public class Options
     /// Set output verbosity
     /// </summary>
     [Option("verbose", Required = false, HelpText = "Set output verbosity")]
-    public UsageEnum Verbose { get; set; } = UsageEnum.Info;
+    public UsageEnum Verbose { get; set; } = UsageEnum.Processing;
 }
