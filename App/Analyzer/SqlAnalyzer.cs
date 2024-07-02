@@ -1,5 +1,7 @@
 using DependencyFinder.App.Controller;
 using DependencyFinder.App.Entities;
+using System.Text;
+using System.Text.RegularExpressions;
 using TSQL;
 using TSQL.Tokens;
 using static DependencyFinder.App.Utils.EnumUtils;
@@ -19,13 +21,14 @@ public class SqlAnalyzer
             FilePath = inputPath,
             Type = SPType.StoreProcedure,
         };
-        CustomWriteLine(UsageEnum.Log, $"Analyzing {fileName} at {inputPath}");
+        CustomWriteLine(UsageEnum.Processing, $"Analyzing {fileName} at {inputPath}");
         try
         {
             if (gptReport)
             {
                 SetEnv();
                 var response = await ChatService.SendMessageAsync(File.ReadAllText(inputPath));
+                response = UniDecode(response);
                 root.GPTReport = response;
             }
 

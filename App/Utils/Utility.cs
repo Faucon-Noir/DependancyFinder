@@ -259,4 +259,22 @@ public partial class Utility
         }
     }
 
+    /// <summary>
+    /// Method to decode unicode string
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    public static string UniDecode(string? input)
+    {
+        if (input == null)
+        {
+            return string.Empty;
+        }
+        var output = Regex.Replace(input, @"(?<!\\)\\u(?<Value>[0-9A-Fa-f])", m =>
+        {
+            // Passing to char.Parse the hex value of the unicode character then converting it to a string
+            return ((char)int.Parse(m.Groups["Value"].Value, System.Globalization.NumberStyles.HexNumber)).ToString();
+        });
+        return output;
+    }
 }

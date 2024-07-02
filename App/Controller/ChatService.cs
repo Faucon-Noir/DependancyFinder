@@ -19,7 +19,7 @@ public class ChatService
         string chatId = Environment.GetEnvironmentVariable("CHAT_ID")!;
         string token = Environment.GetEnvironmentVariable("TOKEN")!;
         string chatUrl = Environment.GetEnvironmentVariable("CHAT_URL")!;
-        CustomWriteLine(UsageEnum.Processing, "Sending to chat...");
+        CustomWriteLine(UsageEnum.Log, "Sending to chat...");
         try
         {
             var requestUri = chatUrl;
@@ -47,7 +47,7 @@ public class ChatService
             var requestContent = new StringContent(JsonSerializer.Serialize(chatDto), Encoding.UTF8, "application/json");
             ChatServiceHelpers.
                         _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-            
+
             // Send message to chat
             var response = await ChatServiceHelpers._httpClient.PostAsync(requestUri, requestContent);
 
