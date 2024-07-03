@@ -1,16 +1,22 @@
-using DependencyFinder.App.Analyzer;
-using DependencyFinder.App.Entities;
-using DependencyFinder.App.Utils;
+using App.Analyzer;
+using App.Entities;
+using App.Utils;
 using System.Globalization;
 using System.Text.Json;
-using static DependencyFinder.App.Utils.EnumUtils;
+using static App.Utils.EnumUtils;
 
-
-namespace DependencyFinder.App;
+namespace App;
 
 public class ProcessAnalyze
 {
-    public static async Task<Task> ProcessAnalyzeAsync(Options options)
+
+    private readonly SqlAnalyzer _sqlAnalyzer;
+
+    public ProcessAnalyze()
+    {
+        _sqlAnalyzer = new();
+    }
+    public async Task<Task> ProcessAnalyzeAsync(Options options)
     {
         string inputPath = options.InputPath;
         string outputPath = options.OutputPath;
@@ -23,7 +29,9 @@ public class ProcessAnalyze
         // setup Json Serializer
         JsonSerializerOptions jsonSerializerOptions = new()
         {
-            WriteIndented = true
+            WriteIndented = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         };
 
         try
@@ -37,10 +45,11 @@ public class ProcessAnalyze
 
                 foreach (string file in files)
                 {
-                    var output = await SqlAnalyzer.AnalyzeSqlAsync(file, gptReport);
+                    CustomWriteLine(UsageEnum.Info, $"Processing: {file}");
+                    var output = await _sqlAnalyzer.AnalyzeSqlAsync(file, gptReport);
                     string outputString = JsonSerializer.Serialize(output);
-                    var outputJson = JsonSerializer.Deserialize<Dictionary<string, object>>(outputString);
-                    allOutputs.Add(SplitFilePath(file).Item2, outputJson!);
+                    var outputJson = JsonSerializer.Deserialize<Dictionary<string, SPEntity>>(outputString) ?? [];
+                    allOutputs.Add(SplitFilePath(file).Item2, outputJson);
                 }
 
                 string json = JsonSerializer.Serialize(allOutputs, jsonSerializerOptions);
@@ -51,11 +60,11 @@ public class ProcessAnalyze
             else
             {
                 string fileName = SplitFilePath(inputPath).Item2;
-                SPEntity sqlAnalysisData = await SqlAnalyzer.AnalyzeSqlAsync(inputPath, gptReport);
+                SPEntity sqlAnalysisData = await _sqlAnalyzer.AnalyzeSqlAsync(inputPath, gptReport);
 
                 string json = JsonSerializer.Serialize(sqlAnalysisData, jsonSerializerOptions);
                 IsValidDirectory(outputPath);
-                File.WriteAllText(Path.Combine(outputPath, $"{fileName}.json"), json);
+                File.WriteAllText(Path.Combine(outputPath, $"{fileName}.json"), json, encoding: System.Text.Encoding.UTF8);
             }
 
             return Task.CompletedTask;

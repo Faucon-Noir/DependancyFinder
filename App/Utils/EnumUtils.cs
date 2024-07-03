@@ -1,4 +1,4 @@
-﻿namespace DependencyFinder.App.Utils;
+﻿namespace App.Utils;
 
 public class EnumUtils
 {

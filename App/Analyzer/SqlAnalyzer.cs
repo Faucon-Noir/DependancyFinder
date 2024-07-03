@@ -1,16 +1,32 @@
-using DependencyFinder.App.Controller;
-using DependencyFinder.App.Entities;
-using System.Text;
-using System.Text.RegularExpressions;
+using App.Controller;
+using App.Entities;
 using TSQL;
 using TSQL.Tokens;
-using static DependencyFinder.App.Utils.EnumUtils;
+using static App.Utils.EnumUtils;
 
-namespace DependencyFinder.App.Analyzer;
+namespace App.Analyzer;
 
 public class SqlAnalyzer
 {
-    public static async Task<SPEntity> AnalyzeSqlAsync(string inputPath, bool gptReport)
+
+    private readonly ChatService _chatService;
+    private readonly SqlAnalyzerHelper _sqlAnalyzerHelper;
+
+
+    public SqlAnalyzer()
+    {
+        _chatService = new();
+        _sqlAnalyzerHelper = new();
+    }
+
+    /// <summary>
+    /// Method to analyze SQL file.
+    /// Also support folder that contains SQL files.
+    /// </summary>
+    /// <param name="inputPath"></param>
+    /// <param name="gptReport"></param>
+    /// <returns></returns>
+    public async Task<SPEntity> AnalyzeSqlAsync(string inputPath, bool gptReport)
     {
         string fileName = SplitFilePath(inputPath).Item2;
         fileName = FormatFileName(fileName);
@@ -21,16 +37,10 @@ public class SqlAnalyzer
             FilePath = inputPath,
             Type = SPType.StoreProcedure,
         };
-        CustomWriteLine(UsageEnum.Processing, $"Analyzing {fileName} at {inputPath}");
+
         try
         {
-            if (gptReport)
-            {
-                SetEnv();
-                var response = await ChatService.SendMessageAsync(File.ReadAllText(inputPath));
-                response = UniDecode(response);
-                root.GPTReport = response;
-            }
+            CustomWriteLine(UsageEnum.Processing, $"Analyzing {fileName} at {inputPath}");
 
             string sql = await File.ReadAllTextAsync(inputPath);
             TSQLTokenizer tokenizer = new(sql);
@@ -47,38 +57,24 @@ public class SqlAnalyzer
                 {
                     // Finding basic commands
                     string tokenTextUpper = token.Text.ToUpperInvariant();
-                    if (root.HeavyQueries.TryGetValue(tokenTextUpper, out int value))
+
+                    switch (tokenTextUpper)
                     {
-                        root.HeavyQueries[tokenTextUpper] = ++value;
-                    }
-                    // Finding dependencies
-                    else if (tokenTextUpper == "EXEC")
-                    {
-                        isExecCommand = true;
-                    }
-                    else if (token.Text.ToUpperInvariant() == "DROP" && tokenizer.MoveNext())
-                    {
-                        TSQLToken nextToken = tokenizer.Current;
-                        if (nextToken.Type == TSQLTokenType.Keyword && nextToken.Text.ToUpperInvariant() == "TABLE")
-                        {
-                            root.HeavyQueries["DROP TABLE"]++;
-                        }
-                        else if (nextToken.Text.ToUpperInvariant() == "DATABASE")
-                        {
-                            root.HeavyQueries["DROP DATABASE"]++;
-                        }
-                    }
-                    else if (token.Text.ToUpperInvariant() == "ALTER" && tokenizer.MoveNext())
-                    {
-                        TSQLToken nextToken = tokenizer.Current;
-                        if (nextToken.Type == TSQLTokenType.Keyword && nextToken.Text.ToUpperInvariant() == "TABLE")
-                        {
-                            root.HeavyQueries["ALTER TABLE"]++;
-                        }
-                        else if (nextToken.Text.ToUpperInvariant() == "DATABASE")
-                        {
-                            root.HeavyQueries["ALTER DATABASE"]++;
-                        }
+                        case "EXEC":
+                            isExecCommand = true;
+                            break;
+                        case "DROP":
+                            _sqlAnalyzerHelper.HandlePattern(root, tokenizer, "DROP");
+                            break;
+                        case "ALTER":
+                            _sqlAnalyzerHelper.HandlePattern(root, tokenizer, "ALTER");
+                            break;
+                        case "SELECT":
+                        case "UPDATE":
+                        case "INSERT":
+                        case "MERGE":
+                            ++root.HeavyQueries[tokenTextUpper];
+                            break;
                     }
                 }
                 // Adding dependencies
@@ -89,33 +85,20 @@ public class SqlAnalyzer
                 }
             }
 
+            // Recursive for dependencies
+            await _sqlAnalyzerHelper.SqlRecursive(gptReport, filePath, root, dependencies);
+
             // Logging heavy query
             foreach (var query in root.HeavyQueries)
             {
-                CustomWriteLine(UsageEnum.Log, $"{query.Key}: {query.Value}");
+                CustomWriteLine(UsageEnum.Log, $"{query.Key}: {query.Value} in file {fileName}");
             }
 
-            // Recursive for dependencies
-            foreach (string dep in dependencies)
+            // GPT Report
+            if (gptReport)
             {
-                var depToFind = FormatFileName(dep);
-                var file = FindFileInFilePath(filePath, depToFind);
-                if (file == "File not found" || file == "Directory not found")
-                {
-                    var spEntity = new SPEntity
-                    {
-                        Name = depToFind,
-                        FilePath = file,
-                        Type = SPType.Unkwon
-                    };
-                    root.Dependencies.Add(spEntity);
-                }
-                else
-                {
-                    var spEntity = await AnalyzeSqlAsync(file, gptReport);
-                    spEntity.Type = SPType.StoreProcedure;
-                    root.Dependencies.Add(spEntity);
-                }
+                var response = await _chatService.SendMessageAsync(File.ReadAllText(inputPath));
+                root.GPTReport = response;
             }
         }
         catch (FileNotFoundException)
@@ -125,4 +108,6 @@ public class SqlAnalyzer
 
         return root;
     }
+
+
 }

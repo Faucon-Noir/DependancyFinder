@@ -3,7 +3,6 @@ Cette notation doit être suffisament précise pour être utilisable dans un rap
 Pour chaque critère, je veux également une ligne complémentaire qui justifie la notation.
 La réponse doit être courte mais précise et au format texte.
 Tu dois également conserver les précisions entre parenthèse.
-Remplace tous les caractères un peu spéciaux (par exemple é, è etc) par la lettre de base (par exemple, é devient e, è devient e, etc)
 
 Complexite (plus haut = moins bien): /5
 Proprete du code (plus haut = mieux): /5

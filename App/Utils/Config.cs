@@ -1,7 +1,7 @@
 using CommandLine;
-using static DependencyFinder.App.Utils.EnumUtils;
+using static App.Utils.EnumUtils;
 
-namespace DependencyFinder.App.Utils;
+namespace App.Utils;
 
 public class Options
 {

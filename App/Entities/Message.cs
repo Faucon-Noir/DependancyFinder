@@ -1,4 +1,4 @@
-namespace DependencyFinder.App.Entities;
+namespace App.Entities;
 
 public class Message
 {

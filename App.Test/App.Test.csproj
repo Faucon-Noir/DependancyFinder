@@ -24,4 +24,20 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TestFolder\invalidFile.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFolder\demo\.gitkeep">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFolder\fileToFind.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Test\Analyzer\" />
+  </ItemGroup>
+
 </Project>

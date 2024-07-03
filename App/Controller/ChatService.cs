@@ -1,23 +1,32 @@
-using DependencyFinder.App.Entities;
+using App.Entities;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using static DependencyFinder.App.Utils.EnumUtils;
+using static App.Utils.EnumUtils;
 
 
-namespace DependencyFinder.App.Controller;
+namespace App.Controller;
 
 public class ChatService
 {
+
+    private readonly HttpClient _httpClient;
+
+    public ChatService()
+    {
+        _httpClient = new();
+        string token = Environment.GetEnvironmentVariable("TOKEN") ?? "";
+        _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+    }
+    
     /// <summary>
     /// Method to send file to C2S GPT and get quality report
     /// </summary>
     /// <param name="chatMessage"></param>
     /// <returns></returns>
-    public static async Task<string> SendMessageAsync(string chatMessage)
+    public async Task<string> SendMessageAsync(string chatMessage)
     {
         string chatId = Environment.GetEnvironmentVariable("CHAT_ID")!;
-        string token = Environment.GetEnvironmentVariable("TOKEN")!;
         string chatUrl = Environment.GetEnvironmentVariable("CHAT_URL")!;
         CustomWriteLine(UsageEnum.Log, "Sending to chat...");
         try
@@ -45,11 +54,9 @@ public class ChatService
                 }
             };
             var requestContent = new StringContent(JsonSerializer.Serialize(chatDto), Encoding.UTF8, "application/json");
-            ChatServiceHelpers.
-                        _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
             // Send message to chat
-            var response = await ChatServiceHelpers._httpClient.PostAsync(requestUri, requestContent);
+            var response = await _httpClient.PostAsync(requestUri, requestContent);
 
             // Wait for 10 seconds to get response, due to the delay the chat can have
             await Task.Delay(10000);
@@ -58,18 +65,19 @@ public class ChatService
                 string chatResponse = Environment.GetEnvironmentVariable("CHAT_RESPONSE")!;
                 CustomWriteLine(UsageEnum.Log, chatResponse);
 
+                
                 // Get chat response
-                var json = await ChatServiceHelpers._httpClient.GetAsync(chatResponse);
+                var httpResponse = await _httpClient.GetAsync(chatResponse);
 
-                if (json.IsSuccessStatusCode)
+                if (httpResponse.IsSuccessStatusCode)
                 {
-                    var jsonResponse = await json.Content.ReadFromJsonAsync<List<Message>>();
+                    var jsonResponse = await httpResponse.Content.ReadFromJsonAsync<List<Message>>();
                     var message = jsonResponse?.LastOrDefault()?.Message1;
                     return message?.ToString() ?? "No Message";
                 }
                 else
                 {
-                    throw new Exception($"Failed to get chat response. Status code: {json.StatusCode}. Reason: {json.ReasonPhrase}");
+                    throw new Exception($"Failed to get chat response. Status code: {httpResponse.StatusCode}. Reason: {httpResponse.ReasonPhrase}");
                 }
             }
             else

@@ -1,9 +1,10 @@
-﻿global using static DependencyFinder.App.Utils.Utility;
-using DependencyFinder.App.Utils;
-using DependencyFinder.App;
+﻿global using static App.Utils.Utility;
+global using static App.Utils.FileUtils;
+using App.Utils;
+using App;
 using CommandLine;
 using System.Diagnostics;
-using static DependencyFinder.App.Utils.EnumUtils;
+using static App.Utils.EnumUtils;
 
 namespace DependencyFinder.Tool;
 
@@ -11,10 +12,13 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
+        CustomWriteLine(UsageEnum.Info, "--------------------------------------------- Program Start ---------------------------------------------");
         Stopwatch stopwatch = new();
         try
         {
+            CustomWriteLine(UsageEnum.Log, "Parsing Arguments");
             stopwatch.Start();
+            SetEnv();
             await Parser.Default.ParseArguments<Options>(args).WithParsedAsync(async o =>
            {
                Utility utilityModule = new();
@@ -23,7 +27,8 @@ public class Program
                {
                    Console.WriteLine(errorMessage);
                }
-               await ProcessAnalyze.ProcessAnalyzeAsync(o);
+               var process = new ProcessAnalyze();
+               await process.ProcessAnalyzeAsync(o);
            });
             stopwatch.Stop();
             CustomWriteLine(UsageEnum.Info, "\n--------------------------------------------- Program Complete ---------------------------------------------");
