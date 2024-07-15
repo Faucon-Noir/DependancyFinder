@@ -2,7 +2,7 @@
   "profiles": {
     "DependencyFinder.Tool": {
       "commandName": "Project",
-      "commandLineArgs": "--input F:\\Comete_PS\\dbo.Ps_SendMailErrorProcedure.StoredProcedure.sql --gpt --verbose Processing",
+      "commandLineArgs": "--input ./App.Test/TestFolder/MainSql.sql --verbose Processing",
       "workingDirectory": "C:\\Athena\\DependancyFinder"
     }
   }

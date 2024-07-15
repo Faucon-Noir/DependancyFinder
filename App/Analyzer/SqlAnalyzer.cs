@@ -8,15 +8,65 @@ namespace App.Analyzer;
 
 public class SqlAnalyzer
 {
-
     private readonly ChatService _chatService;
-    private readonly SqlAnalyzerHelper _sqlAnalyzerHelper;
-
-
     public SqlAnalyzer()
     {
         _chatService = new();
-        _sqlAnalyzerHelper = new();
+    }
+
+    /// <summary>
+    /// Method to recursively analyze SQL file.
+    /// </summary>
+    /// <param name="gptReport"></param> 
+    /// <param name="filePath"></param>
+    /// <param name="root"></param>
+    /// <param name="dependencies"></param>
+    /// <returns></returns>
+    public async Task SqlRecursive(bool gptReport, string filePath, SPEntity root, HashSet<string> dependencies)
+    {
+        foreach (string dep in dependencies)
+        {
+            var depToFind = FormatFileName(dep);
+            var file = FindFileInFilePath(filePath, depToFind);
+            if (file == "File not found" || file == "Directory not found")
+            {
+                var spEntity = new SPEntity
+                {
+                    Name = depToFind,
+                    FilePath = file,
+                    Type = SPType.Unkwon
+                };
+                root.Dependencies.Add(spEntity);
+            }
+            else
+            {
+                var spEntity = await AnalyzeSqlAsync(file, gptReport);
+                spEntity.Type = SPType.StoreProcedure;
+                root.Dependencies.Add(spEntity);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Method to handle patterns that acts on Table or Database
+    /// </summary>
+    /// <param name="root"></param>
+    /// <param name="tokenizer"></param>
+    /// <param name="pattern"></param>
+    public static void HandlePattern(SPEntity root, TSQLTokenizer tokenizer, string pattern)
+    {
+        TSQLToken nextToken = tokenizer.Current;
+        if (nextToken.Type != TSQLTokenType.Keyword || !nextToken.Text.Equals(pattern, StringComparison.InvariantCultureIgnoreCase))
+        {
+            if (nextToken.Text.Equals("DATABASE", StringComparison.InvariantCultureIgnoreCase))
+            {
+                root.HeavyQueries[$"{pattern} DATABASE"]++;
+            }
+        }
+        else
+        {
+            root.HeavyQueries[$"{pattern} TABLE"]++;
+        }
     }
 
     /// <summary>
@@ -64,10 +114,10 @@ public class SqlAnalyzer
                             isExecCommand = true;
                             break;
                         case "DROP":
-                            _sqlAnalyzerHelper.HandlePattern(root, tokenizer, "DROP");
+                            HandlePattern(root, tokenizer, "DROP");
                             break;
                         case "ALTER":
-                            _sqlAnalyzerHelper.HandlePattern(root, tokenizer, "ALTER");
+                            HandlePattern(root, tokenizer, "ALTER");
                             break;
                         case "SELECT":
                         case "UPDATE":
@@ -86,7 +136,7 @@ public class SqlAnalyzer
             }
 
             // Recursive for dependencies
-            await _sqlAnalyzerHelper.SqlRecursive(gptReport, filePath, root, dependencies);
+            await SqlRecursive(gptReport, filePath, root, dependencies);
 
             // Logging heavy query
             foreach (var query in root.HeavyQueries)

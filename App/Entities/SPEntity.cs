@@ -53,5 +53,5 @@ public class SPEntity
     /// <summary>
     /// Last time the entity was updated
     /// </summary>
-    public DateTime LastUpdated { get; set; } = DateTime.Now;
+    //public DateTime LastUpdated { get; set; } = DateTime.Now;
 }
