@@ -1,4 +1,5 @@
 ﻿using App.Analyzer;
+using App.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,19 +10,26 @@ namespace App.Test.Test.Analyzer
 {
     public class AnalyzerTest
     {
-        public void SqlAnalyzerTest()
+        [Fact]
+        public async Task SqlAnalyzerTest()
         {
             // Arrange
-            var sql = "";
-            var expected = "";
+            string sql = "./TestFolder/MainSql.sql";
+            var expected = File.ReadLines(@"./TestFolder/Main.json");
+            var options = new Options
+            {
+                InputPath = "./TestFolder/MainSql.sql",
+                OutputPath = "./TestFolder",
+                GPTReport = false,
+            };
 
             // Act
-            SqlAnalyzer sqlAnalyzer = new();
-            var actual =sqlAnalyzer.AnalyzeSqlAsync(sql, false);
-            var result = File.ReadAllText("../TestFolder/Main.json");
+            ProcessAnalyze analyzer = new();
+            await analyzer.ProcessAnalyzeAsync(options);
+            var result = File.ReadLines("./TestFolder/MainSql.json");
 
             // Assert
-            Assert.Equal(expected, result);
+            Assert.Equal(expected.FirstOrDefault(), result.FirstOrDefault());
         }
     }
 }

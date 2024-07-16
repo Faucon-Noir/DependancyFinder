@@ -34,6 +34,9 @@
     <None Update="TestFolder\fileToFind.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TestFolder\Main.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestFolder\MainSql.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
