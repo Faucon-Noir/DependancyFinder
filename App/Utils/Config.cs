@@ -1,4 +1,5 @@
 using CommandLine;
+using Newtonsoft.Json;
 using static App.Utils.EnumUtils;
 
 namespace App.Utils;

@@ -1,6 +1,7 @@
 using App.Analyzer;
 using App.Entities;
 using App.Utils;
+using System.Diagnostics;
 using System.Globalization;
 using System.Text.Json;
 using static App.Utils.EnumUtils;
@@ -64,9 +65,10 @@ public class ProcessAnalyze
 
                 string json = JsonSerializer.Serialize(sqlAnalysisData, jsonSerializerOptions);
                 IsValidDirectory(outputPath);
-                File.WriteAllText(Path.Combine(outputPath, $"{fileName}.json"), json, encoding: System.Text.Encoding.UTF8);
+                string filePath = Path.Combine(outputPath, $"{fileName}.json");
+                File.WriteAllText(filePath, json, encoding: System.Text.Encoding.UTF8);
+                JsonToVisualizer(filePath);
             }
-
             return Task.CompletedTask;
         }
         catch (Exception e)

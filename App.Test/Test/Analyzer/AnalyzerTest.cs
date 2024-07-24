@@ -1,10 +1,4 @@
-﻿using App.Analyzer;
-using App.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using App.Utils;
 
 namespace App.Test.Test.Analyzer
 {
@@ -14,7 +8,6 @@ namespace App.Test.Test.Analyzer
         public async Task SqlAnalyzerTest()
         {
             // Arrange
-            string sql = "./TestFolder/MainSql.sql";
             var expected = File.ReadLines(@"./TestFolder/Main.json");
             var options = new Options
             {

@@ -1,0 +1,689 @@
+﻿{
+  "name": "dbo.usp_CalculMoteur.StoredProcedure",
+  "dependencies": [
+    {
+      "name": "dbo.usp_CalculCommandeAValoriser.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculCommandeAValoriser.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 38,
+        "UPDATE": 8,
+        "DELETE": 0,
+        "INSERT": 4,
+        "MERGE": 3,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.Ps_SendMailErrorProcedure.StoredProcedure",
+      "dependencies": [
+        {
+          "name": "msdb",
+          "dependencies": [],
+          "size": 0,
+          "type": "Unkwon",
+          "filePath": "File not found",
+          "heavyQueries": {
+            "SELECT": 0,
+            "UPDATE": 0,
+            "DELETE": 0,
+            "INSERT": 0,
+            "MERGE": 0,
+            "DROP TABLE": 0,
+            "DROP DATBASE": 0,
+            "ALTER TABLE": 0,
+            "ALTER DATABASE": 0
+          },
+          "gptReport": "No report requested"
+        }
+      ],
+      "size": 1,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.Ps_SendMailErrorProcedure.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 3,
+        "UPDATE": 0,
+        "DELETE": 0,
+        "INSERT": 0,
+        "MERGE": 0,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_CalculCommandeAValoriserCreation.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculCommandeAValoriserCreation.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 18,
+        "UPDATE": 4,
+        "DELETE": 0,
+        "INSERT": 2,
+        "MERGE": 1,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.Ps_ChangeCompteurs.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.Ps_ChangeCompteurs.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 4,
+        "UPDATE": 2,
+        "DELETE": 0,
+        "INSERT": 0,
+        "MERGE": 0,
+        "DROP TABLE": 2,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_CalculNouveauxClients.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculNouveauxClients.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 9,
+        "UPDATE": 3,
+        "DELETE": 0,
+        "INSERT": 1,
+        "MERGE": 1,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_calculOffrePrivilege.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_calculOffrePrivilege.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 9,
+        "UPDATE": 4,
+        "DELETE": 0,
+        "INSERT": 1,
+        "MERGE": 1,
+        "DROP TABLE": 2,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_CalculCPME.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculCPME.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 7,
+        "UPDATE": 1,
+        "DELETE": 0,
+        "INSERT": 1,
+        "MERGE": 1,
+        "DROP TABLE": 2,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_CalculFID2020.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculFID2020.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 3,
+        "UPDATE": 2,
+        "DELETE": 0,
+        "INSERT": 1,
+        "MERGE": 1,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_CalculAffecteUtilisateur.StoredProcedure",
+      "dependencies": [
+        {
+          "name": "dbo.Usp_CalculAffecteEnveloppe.StoredProcedure",
+          "dependencies": [],
+          "size": 0,
+          "type": "StoreProcedure",
+          "filePath": "F:\\Comete_PS\\dbo.Usp_CalculAffecteEnveloppe.StoredProcedure.sql",
+          "heavyQueries": {
+            "SELECT": 4,
+            "UPDATE": 3,
+            "DELETE": 0,
+            "INSERT": 0,
+            "MERGE": 0,
+            "DROP TABLE": 1,
+            "DROP DATBASE": 0,
+            "ALTER TABLE": 0,
+            "ALTER DATABASE": 0
+          },
+          "gptReport": "No report requested"
+        }
+      ],
+      "size": 1,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculAffecteUtilisateur.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 47,
+        "UPDATE": 11,
+        "DELETE": 0,
+        "INSERT": 23,
+        "MERGE": 1,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_CalculAffecteUtilisateurCrea.StoredProcedure",
+      "dependencies": [
+        {
+          "name": "dbo.Usp_CalculAffecteEnveloppeCrea.StoredProcedure",
+          "dependencies": [],
+          "size": 0,
+          "type": "StoreProcedure",
+          "filePath": "F:\\Comete_PS\\dbo.Usp_CalculAffecteEnveloppeCrea.StoredProcedure.sql",
+          "heavyQueries": {
+            "SELECT": 1,
+            "UPDATE": 3,
+            "DELETE": 0,
+            "INSERT": 0,
+            "MERGE": 0,
+            "DROP TABLE": 1,
+            "DROP DATBASE": 0,
+            "ALTER TABLE": 0,
+            "ALTER DATABASE": 0
+          },
+          "gptReport": "No report requested"
+        }
+      ],
+      "size": 1,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculAffecteUtilisateurCrea.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 46,
+        "UPDATE": 10,
+        "DELETE": 0,
+        "INSERT": 23,
+        "MERGE": 1,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_Calcul_PO_Obso.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_Calcul_PO_Obso.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 3,
+        "UPDATE": 0,
+        "DELETE": 0,
+        "INSERT": 1,
+        "MERGE": 0,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.USP_Calcul_DiffPoAValidation.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.USP_Calcul_DiffPoAValidation.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 5,
+        "UPDATE": 0,
+        "DELETE": 0,
+        "INSERT": 2,
+        "MERGE": 0,
+        "DROP TABLE": 2,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_CalculRdvDVATrimestrielle.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculRdvDVATrimestrielle.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 2,
+        "UPDATE": 0,
+        "DELETE": 0,
+        "INSERT": 1,
+        "MERGE": 0,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_CalculPrimeDVATrimestrielle.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculPrimeDVATrimestrielle.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 30,
+        "UPDATE": 3,
+        "DELETE": 0,
+        "INSERT": 2,
+        "MERGE": 0,
+        "DROP TABLE": 1,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_CalculSyntheseResil.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculSyntheseResil.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 23,
+        "UPDATE": 1,
+        "DELETE": 0,
+        "INSERT": 3,
+        "MERGE": 1,
+        "DROP TABLE": 6,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_CalculAffecteUtilisateurGR.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculAffecteUtilisateurGR.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 14,
+        "UPDATE": 0,
+        "DELETE": 0,
+        "INSERT": 6,
+        "MERGE": 0,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_CalculSynthese.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculSynthese.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 69,
+        "UPDATE": 21,
+        "DELETE": 0,
+        "INSERT": 29,
+        "MERGE": 6,
+        "DROP TABLE": 14,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_CalculCumulPoBrute.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculCumulPoBrute.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 5,
+        "UPDATE": 0,
+        "DELETE": 0,
+        "INSERT": 2,
+        "MERGE": 0,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_CalculCumulPoResilie.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculCumulPoResilie.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 4,
+        "UPDATE": 0,
+        "DELETE": 0,
+        "INSERT": 2,
+        "MERGE": 0,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_CalculCumulPoNet.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculCumulPoNet.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 7,
+        "UPDATE": 0,
+        "DELETE": 0,
+        "INSERT": 3,
+        "MERGE": 0,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_CalculRemMensuel.StoredProcedure",
+      "dependencies": [
+        {
+          "name": "dbo._QualiteDonneeExporter.StoredProcedure",
+          "dependencies": [],
+          "size": 0,
+          "type": "StoreProcedure",
+          "filePath": "F:\\Comete_PS\\dbo._QualiteDonneeExporter.StoredProcedure.sql",
+          "heavyQueries": {
+            "SELECT": 4,
+            "UPDATE": 1,
+            "DELETE": 0,
+            "INSERT": 0,
+            "MERGE": 0,
+            "DROP TABLE": 0,
+            "DROP DATBASE": 0,
+            "ALTER TABLE": 0,
+            "ALTER DATABASE": 0
+          },
+          "gptReport": "No report requested"
+        }
+      ],
+      "size": 1,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculRemMensuel.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 14,
+        "UPDATE": 9,
+        "DELETE": 0,
+        "INSERT": 8,
+        "MERGE": 0,
+        "DROP TABLE": 2,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_CalculAffaire.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculAffaire.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 1,
+        "UPDATE": 0,
+        "DELETE": 0,
+        "INSERT": 1,
+        "MERGE": 0,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.USP_CALCUL_PERFORMANCE.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.USP_CALCUL_PERFORMANCE.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 6,
+        "UPDATE": 0,
+        "DELETE": 0,
+        "INSERT": 3,
+        "MERGE": 0,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_CalculPoNet.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculPoNet.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 6,
+        "UPDATE": 0,
+        "DELETE": 0,
+        "INSERT": 1,
+        "MERGE": 0,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.USP_CALCUL_PO_NETTE_MENS.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.USP_CALCUL_PO_NETTE_MENS.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 9,
+        "UPDATE": 0,
+        "DELETE": 0,
+        "INSERT": 1,
+        "MERGE": 0,
+        "DROP TABLE": 1,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_CalculAccelerateurCumule.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculAccelerateurCumule.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 8,
+        "UPDATE": 0,
+        "DELETE": 0,
+        "INSERT": 3,
+        "MERGE": 0,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_calcul_REM_Ventes.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_calcul_REM_Ventes.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 13,
+        "UPDATE": 0,
+        "DELETE": 0,
+        "INSERT": 3,
+        "MERGE": 0,
+        "DROP TABLE": 4,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.USP_CALCUL_REM_ACCELERATEURS.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.USP_CALCUL_REM_ACCELERATEURS.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 12,
+        "UPDATE": 0,
+        "DELETE": 0,
+        "INSERT": 3,
+        "MERGE": 0,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_CalculBooster.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculBooster.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 1,
+        "UPDATE": 0,
+        "DELETE": 0,
+        "INSERT": 1,
+        "MERGE": 0,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.usp_CalculCompteurCumule.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.usp_CalculCompteurCumule.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 12,
+        "UPDATE": 1,
+        "DELETE": 0,
+        "INSERT": 3,
+        "MERGE": 0,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    },
+    {
+      "name": "dbo.Usp_StatCalcul.StoredProcedure",
+      "dependencies": [],
+      "size": 0,
+      "type": "StoreProcedure",
+      "filePath": "F:\\Comete_PS\\dbo.Usp_StatCalcul.StoredProcedure.sql",
+      "heavyQueries": {
+        "SELECT": 2,
+        "UPDATE": 0,
+        "DELETE": 0,
+        "INSERT": 1,
+        "MERGE": 0,
+        "DROP TABLE": 0,
+        "DROP DATBASE": 0,
+        "ALTER TABLE": 0,
+        "ALTER DATABASE": 0
+      },
+      "gptReport": "No report requested"
+    }
+  ],
+  "size": 31,
+  "type": "StoreProcedure",
+  "filePath": "F:\\Comete_PS\\dbo.usp_CalculMoteur.StoredProcedure.sql",
+  "heavyQueries": {
+    "SELECT": 29,
+    "UPDATE": 0,
+    "DELETE": 0,
+    "INSERT": 0,
+    "MERGE": 0,
+    "DROP TABLE": 0,
+    "DROP DATBASE": 0,
+    "ALTER TABLE": 0,
+    "ALTER DATABASE": 0
+  },
+  "gptReport": "No report requested"
+}

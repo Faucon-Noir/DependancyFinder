@@ -27,9 +27,10 @@ public class FileUtilsTest
     }
 
     [Fact]
-    public void TestSplitFilePath() {         // Arrange
+    public void TestSplitFilePath()
+    {         // Arrange
         string filePath = "./TestFolder/fileToFind.sql";
-        string expectedDirectory = ".\\TestFolder";
+        string expectedDirectory = "./TestFolder";
         string expectedFileName = "fileToFind";
 
         // Act

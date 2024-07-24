@@ -19,6 +19,11 @@ public class SPEntity
     public List<SPEntity> Dependencies { get; set; } = [];
 
     /// <summary>
+    /// Count of dependencies
+    /// </summary>
+    public int Size => Dependencies.Count;
+
+    /// <summary>
     /// Procedure type
     /// </summary>
     [JsonConverter(typeof(JsonStringEnumConverter))]
@@ -53,5 +58,5 @@ public class SPEntity
     /// <summary>
     /// Last time the entity was updated
     /// </summary>
-    //public DateTime LastUpdated { get; set; } = DateTime.Now;
+    public DateTime LastUpdated { get; set; } = DateTime.Now;
 }

@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Diagnostics;
+using System.Net.Http.Json;
+using System.Text.RegularExpressions;
 using static App.Utils.EnumUtils;
 
 namespace App.Utils;
@@ -185,6 +187,27 @@ public class FileUtils
         {
             CustomWriteLine(UsageEnum.Error, $"IsValidPath Error: {e.Message}");
             return false;
+        }
+    }
+
+    /// <summary>
+    /// Method to format a json file to be visualized in the web visualizer
+    /// </summary>
+    /// <param name="filepath"></param>
+    public static void JsonToVisualizer(string filePath)
+    {
+        try
+        {
+            File.Copy(filePath, @".\App.Server\output.json", true);
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = @".\App\index.html",
+                UseShellExecute = true
+            });
+        }
+        catch (Exception e)
+        {
+            CustomWriteLine(UsageEnum.Error, $"Error Opening File: {e.Message}");
         }
     }
 }
