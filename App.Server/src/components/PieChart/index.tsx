@@ -25,7 +25,7 @@ const CustomPieChart = () => {
 		};
 
 		fetchData();
-	}, []);
+	}, [jsonData.dependencies]);
 
 	return (
 		<>

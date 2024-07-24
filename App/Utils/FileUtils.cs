@@ -194,16 +194,22 @@ public class FileUtils
     /// Method to format a json file to be visualized in the web visualizer
     /// </summary>
     /// <param name="filepath"></param>
-    public static void JsonToVisualizer(string filePath)
+    public static async void JsonToVisualizer(string filePath)
     {
         try
         {
-            File.Copy(filePath, @".\App.Server\output.json", true);
-            Process.Start(new ProcessStartInfo
+            File.Copy(filePath, @".\App.Server\src\assets\output.json", true);
+            var process = Process.Start(new ProcessStartInfo
             {
-                FileName = @".\App\index.html",
+                FileName = "cmd.exe",
+                Arguments = "/c npm install -g yarn && yarn install && yarn dev",
+                WorkingDirectory = @".\App.Server\",
+                CreateNoWindow = true,
                 UseShellExecute = true
             });
+            await Task.Delay(5000);
+            Process.Start(new ProcessStartInfo
+            { FileName = "http://localhost:5173", UseShellExecute = true });
         }
         catch (Exception e)
         {
